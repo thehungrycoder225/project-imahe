@@ -1,0 +1,94 @@
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Gilroy', sans-serif;
+  padding: 1rem;
+  color: #323232;
+}
+/*
+  5. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  6. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+  7. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+  8. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+}
+
+:root {
+  --blue: #5e72e4;
+  --indigo: #5603ad;
+  --purple: #8965e0;
+  --pink: #f3a4b5;
+  --red: #f5365c;
+  --orange: #fb6340;
+  --yellow: #ffd600;
+  --green: #2dce89;
+  --teal: #11cdef;
+  --cyan: #2bffc6;
+  --gray: #6c757d;
+  --gray-dark: #32325d;
+  --light: #ced4da;
+  --lighter: #e9ecef;
+  --primary: #e14eca;
+  --secondary: #f4f5f7;
+  --success: #00f2c3;
+  --info: #1d8cf8;
+  --warning: #ff8d72;
+  --danger: #fd5d93;
+  --light: #adb5bd;
+  --dark: #212529;
+  --default: #344675;
+  --white: #fff;
+  --neutral: #fff;
+  --darker: #000;
+}
