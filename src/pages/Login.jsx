@@ -11,11 +11,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [token, setToken] = useState(null);
   const navigateTo = useNavigate();
-  const { setIsAuthenticated, setUser, isAuthenticated } =
-    useContext(AuthContext); // Use AuthContext
+  const { login, isAuthenticated } = useContext(AuthContext); // Use login from AuthContext
   const API_URL = 'http://localhost:3000/v1/api/auth/login';
 
   useEffect(() => {
@@ -23,6 +20,7 @@ const Login = () => {
       isAuthenticated && navigateTo('/profile');
     }
   }, [isAuthenticated, navigateTo]); // Redirect to profile if authenticated
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -34,19 +32,13 @@ const Login = () => {
 
       if (response.status === 200) {
         const { token, user } = response.data;
-
-        setToken(token);
         sessionStorage.setItem('x-auth-token', token);
         localStorage.setItem('x-auth-token', token);
-
-        setSuccess(true);
-        setIsAuthenticated(true);
-        setUser(user);
+        login(user); // Use login function from AuthContext
       }
     } catch (error) {
       console.log(error);
       setError(error.response.data.message);
-      setSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -63,7 +55,6 @@ const Login = () => {
       >
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {loading && <p>Loading...</p>}
-        {success && <p>Login successful</p>}
         <FormControl
           label='Student Number'
           id='studentNumber'

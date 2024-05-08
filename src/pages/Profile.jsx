@@ -12,18 +12,19 @@ const api = axios.create({
 });
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext); // Use logout from AuthContext
   const [userData, setUserData] = useState(user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const { setUser, setIsAuthenticated } = useContext(AuthContext); // Use AuthContext
+  const navigateTo = useNavigate();
+
   const [formValues, setFormValues] = useState({
     name: user.name,
     email: user.email,
     avatar: null,
   });
-  const navigateTo = useNavigate();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -112,13 +113,9 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('x-auth-token');
-    sessionStorage.removeItem('x-auth-token');
-    setIsAuthenticated(false);
-    setUser(null);
+    logout(); // Use logout function from AuthContext
     navigateTo('/');
   };
-
   return (
     <>
       <h1 className={styles.title}>Portfolio</h1>
