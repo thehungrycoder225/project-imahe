@@ -5,11 +5,14 @@ import { AuthContext } from '../middleware/AuthContext';
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(user);
+  const token = localStorage.getItem('x-auth-token');
 
   useEffect(() => {
     if (user && user._id) {
       axios
-        .get(`http://localhost:3000/v1/api/users/${user._id}`)
+        .get(`http://localhost:3000/v1/api/users/${user._id}`, {
+          headers: { 'x-auth-token': token },
+        })
         .then((response) => {
           setUserData(response.data);
         })
@@ -17,7 +20,7 @@ const Profile = () => {
           console.error(error);
         });
     }
-  }, [user]);
+  }, [user, token]);
 
   const handleInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });

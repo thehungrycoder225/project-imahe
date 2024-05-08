@@ -1,10 +1,22 @@
+@font-face {
+  font-family: 'Adeptly';
+  src: local('Adeptly'), local('Adeptly'),
+    url('./assets/fonts/adept/AdeptlyRegular-OVz6d.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Batliholm';
+  src: local('Batliholm'), local('Batliholm'),
+    url('./assets/fonts/baltihom/Normal 400.ttf') format('truetype');
+}
+
 /* Grid Layout */
 .container {
   display: grid;
   grid-gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 1440px;
+  /* margin: 0 auto;
+  padding: 0 20px; */
 }
 
 .row {
@@ -20,4 +32,9 @@
   background: linear-gradient(90deg, #ff00cc, #3333ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.main-title {
+  font-family: 'Adeptly';
+  font-size: 2rem;
 }
