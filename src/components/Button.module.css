@@ -53,6 +53,20 @@
   background-color: var(--primary-dark);
   color: var(--lighter);
 }
+
+.btn-neutral {
+  background-color: var(--neutral);
+  color: var(--dark);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-neutral:hover,
+.btn-neutral:focus,
+.btn-neutral:active {
+  outline: 1px solid var(--neutral-dark);
+  background-color: var(--neutral-dark);
+  color: var(--gray);
+}
 /* Responsive Styles */
 
 @media screen and (max-width: 768px) {
