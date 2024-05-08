@@ -1,0 +1,51 @@
+.container {
+  width: 100%;
+  margin: auto;
+  padding: 3.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 1.9fr 0.6fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    'Profile Widgets Widgets'
+    'Profile Photos Photos'
+    '. . .';
+  gap: 1rem;
+}
+
+.Widgets {
+  grid-area: Widgets;
+}
+
+.Profile {
+  grid-area: Profile;
+}
+
+.Photos {
+  grid-area: Photos;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}

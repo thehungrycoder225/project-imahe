@@ -40,6 +40,19 @@
   color: var(--lighter);
 }
 
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--lighter);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  outline: 1px solid var(--primary-dark);
+  background-color: var(--primary-dark);
+  color: var(--lighter);
+}
 /* Responsive Styles */
 
 @media screen and (max-width: 768px) {
