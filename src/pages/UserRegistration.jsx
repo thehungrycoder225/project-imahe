@@ -1,116 +1,150 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import style from './UserRegistration.module.css';
+import FormControl from '../components/FormControl';
+import Button from '../components/Button';
+import Spinner from '../components/Spinner';
 
 function UserRegistration() {
-  const [image, setImage] = useState(null);
-  const [email, setEmail] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
-  const [name, setName] = useState('');
+  const [form, setForm] = useState({
+    image: null,
+    email: '',
+    studentNumber: '',
+    name: '',
+  });
+
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const API_URL = 'http://localhost:3000/v1/api/users';
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    let url;
+    if (form.image) {
+      url = URL.createObjectURL(form.image);
+      setImagePreviewUrl(url);
+    }
+
+    return () => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    };
+  }, [form.image]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prevState) => ({ ...prevState, [name]: value }));
+  };
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setImage(file);
+    setForm((prevState) => ({ ...prevState, image: event.target.files[0] }));
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    // Form validation
+    if (!form.email || !form.studentNumber || !form.name || !form.image) {
+      setError('Please fill out all fields.');
+      return;
+    }
 
-    // Create a new FormData object
     const formData = new FormData();
-    formData.append('image', image);
-    formData.append('email', email);
-    formData.append('studentNumber', studentNumber);
-    formData.append('name', name);
+    Object.keys(form).forEach((key) => formData.append(key, form[key]));
+    setIsLoading(true); // Set isLoading to true before making the request
 
     try {
-      // Send the form data to the server using axios
       const response = await axios.post(API_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      // Reset the form fields
-      setImage('');
-      setEmail('');
-      setStudentNumber('');
-      setName('');
-
-      // Check the response status and set success or error message accordingly
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
+        // Check for status 200 or 201
         setSuccess(response.data.message);
-        console.log(response.data.message);
         setError('');
-      } else if (response.status === 400 || response.status === 500) {
-        setSuccess('');
-        setError(response.data.message);
-        console.log(response.data.message);
+        setForm((prevState) => ({
+          ...prevState,
+          image: null,
+          url: '',
+          email: '',
+          studentNumber: '',
+          name: '',
+        }));
+        navigate('/register-success'); // Replace '/success' with the desired redirect path
       }
+      console.log(response.data);
     } catch (error) {
-      // Handle any errors that occur during form submission
-      console.error('An error occurred:', error);
-      setError('An error occurred while registering the user.');
+      console.error(error);
+      setError(
+        error.response?.data?.message ||
+          'An error occurred while registering the user.'
+      );
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is done
     }
   };
-
   return (
-    <>
-      <form onSubmit={handleFormSubmit} className={style['form-group']}>
-        {error && <div className={style['toast-error']}>{error}</div>}
-        {success && <div className={style['toast-success']}>{success}</div>}
+    <div className={style.container}>
+      {isLoading && <Spinner />}
+      {error && <div className={style['toast-error']}>{error}</div>}
+      {success && <div className={style['toast-success']}>{success}</div>}
+      <form onSubmit={handleFormSubmit} className={style['form']}>
         <div>
-          {image && (
-            <div>
-              <label>Chosen Image:</label>
-              <img
-                src={URL.createObjectURL(image)}
-                alt='Chosen Image'
-                className={style['responsive-image']}
-              />
-            </div>
-          )}
-          <label htmlFor='image'>Image:</label>
-          <input type='file' id='image' onChange={handleImageChange} />
+          <img
+            src={imagePreviewUrl}
+            alt='Chosen Image'
+            className={style['responsive-image']}
+          />
+          <FormControl
+            label='Image'
+            type='file'
+            id={'image'}
+            name={'image'}
+            change={handleImageChange}
+          />
         </div>
         <div>
-          <label htmlFor='email'>Email:</label>
-          <input
+          <FormControl
+            label='Email'
             type='email'
-            id='email'
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            id={'email'}
+            name={'email'}
+            value={form.email}
+            change={handleInputChange}
           />
         </div>
         <div>
-          <label htmlFor='studentNumber'>Student Number:</label>
-          <input
+          <FormControl
+            label='Student Number'
             type='text'
-            id='studentNumber'
-            value={studentNumber}
-            onChange={(event) => setStudentNumber(event.target.value)}
+            name={'studentNumber'}
+            id={'studentNumber'}
+            value={form.studentNumber}
+            change={handleInputChange}
           />
         </div>
+        <FormControl
+          label='Name'
+          id={'name'}
+          name={'name'}
+          type='text'
+          value={form.name}
+          change={handleInputChange}
+        />
         <div>
-          <label htmlFor='name'>Name:</label>
-          <input
-            type='text'
-            id='name'
-            value={name}
-            onChange={(event) => setName(event.target.value)}
+          <Button
+            type='submit'
+            text={'Register'}
+            size={'btn-block'}
+            color={'btn-primary'}
           />
         </div>
-        <button
-          type='submit'
-          className={`${style['btn']} ${style['btn-primary']}`}
-        >
-          Register
-        </button>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -1,5 +1,14 @@
 import style from './FormControl.module.css';
-function FormControl({ label, id, type, value, change, disabled, state }) {
+function FormControl({
+  label,
+  id,
+  type,
+  value,
+  change,
+  disabled,
+  state,
+  name,
+}) {
   return (
     <div>
       <label
@@ -10,6 +19,7 @@ function FormControl({ label, id, type, value, change, disabled, state }) {
       </label>
       <input
         type={type}
+        name={name}
         id={id}
         className={`${style['form-control']} ${style[`${state}`]}`}
         value={value}

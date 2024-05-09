@@ -74,7 +74,7 @@ const Login = () => {
           text='Login'
           click={handleLogin}
           size={'btn-block'}
-          color={'btn-dark'}
+          color={'btn-primary'}
         />
       </form>
     </div>
