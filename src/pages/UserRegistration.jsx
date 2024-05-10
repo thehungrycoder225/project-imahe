@@ -18,6 +18,8 @@ function UserRegistration() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState(null); // Add message state variable
+
   const API_URL = 'http://localhost:3000/v1/api/users';
   const navigate = useNavigate();
 
@@ -64,7 +66,7 @@ function UserRegistration() {
 
       if (response.status === 200 || response.status === 201) {
         // Check for status 200 or 201
-        setSuccess(response.data.message);
+        setMessage(response.data.message); // Set message on success
         setError('');
         setForm((prevState) => ({
           ...prevState,
@@ -79,19 +81,33 @@ function UserRegistration() {
       console.log(response.data);
     } catch (error) {
       console.error(error);
-      setError(
-        error.response?.data?.message ||
-          'An error occurred while registering the user.'
-      );
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setError(
+          error.response?.data?.message ||
+            'An error occurred while registering the user.'
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError('Network error. Please check try again later');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError('An error occurred. Please try again.');
+      }
     } finally {
       setIsLoading(false); // Set isLoading to false after the request is done
     }
   };
   return (
     <div className={style.container}>
-      {isLoading && <Spinner />}
-      {error && <div className={style['toast-error']}>{error}</div>}
-      {success && <div className={style['toast-success']}>{success}</div>}
+      {isLoading ? (
+        <Spinner /> // Render Spinner when isLoading is true
+      ) : error ? (
+        <div className={style['toast-error']}>{error}</div> // Render error message when error is not null
+      ) : message ? (
+        <div className={style['toast-success']}>{message}</div> // Render success message when message is not null
+      ) : null}
       <form onSubmit={handleFormSubmit} className={style['form']}>
         <div>
           <img

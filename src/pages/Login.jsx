@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../middleware/AuthContext';
 import FormControl from '../components/FormControl';
 import Button from '../components/Button';
+import Spinner from '../components/Spinner';
 import styles from './Login.module.css';
 
 const Login = () => {
@@ -12,8 +13,38 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigateTo = useNavigate();
+
   const { login, isAuthenticated } = useContext(AuthContext); // Use login from AuthContext
-  const API_URL = 'http://localhost:3000/v1/api/auth/login';
+  const API_URL =
+    import.meta.VITE_REACT_APP_API_URL ||
+    'http://localhost:3000/v1/api/auth/login';
+
+  const validateStudentNumber = (studentNumber) => {
+    const studentNumberRegex = /^[a-zA-Z0-9]+$/;
+    if (!studentNumberRegex.test(studentNumber)) {
+      setError('Student number must only contain letters and numbers.');
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      setError('Please enter your password.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleStudentNumberChange = (e) => {
+    setStudentNumber(e.target.value);
+    validateStudentNumber(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    validatePassword(e.target.value);
+  };
 
   useEffect(() => {
     {
@@ -23,6 +54,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!validateStudentNumber(studentNumber) || !validatePassword(password)) {
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.post(API_URL, {
@@ -35,10 +71,22 @@ const Login = () => {
         sessionStorage.setItem('x-auth-token', token);
         localStorage.setItem('x-auth-token', token);
         login(user); // Use login function from AuthContext
+      } else {
+        setError('An error occurred while logging in. Please try again.');
       }
     } catch (error) {
       console.log(error);
-      setError(error.response.data.message);
+      if (error.response) {
+        setError(
+          error.response?.data?.message || 'An error occurred while logging in.'
+        );
+      } else if (error.request) {
+        setError(
+          'Unable to connect to the server. Please check your internet connection and try again.'
+        );
+      } else {
+        setError(error);
+      }
     } finally {
       setLoading(false);
     }
@@ -47,27 +95,27 @@ const Login = () => {
   return (
     <div className={`${styles.container}`}>
       <h1 className='main-title'>Imahe</h1>
-      <form
-        className={`${styles.form}`}
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {loading && <p>Loading...</p>}
+      <form className={`${styles.form}`} onSubmit={handleLogin}>
+        <div className={styles['text-center']}>
+          {loading ? (
+            <Spinner />
+          ) : (
+            error && <p className={styles['text-danger']}>{error}</p>
+          )}
+        </div>
         <FormControl
           label='Student Number'
           id='studentNumber'
           type='text'
           value={studentNumber}
-          change={(e) => setStudentNumber(e.target.value)}
+          change={handleStudentNumberChange}
         />
         <FormControl
           label='Password'
           id='password'
           type='password'
           value={password}
-          change={(e) => setPassword(e.target.value)}
+          change={handlePasswordChange}
         />
 
         <Button

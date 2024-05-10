@@ -5,9 +5,13 @@ import axios from 'axios';
 import styles from './Profile.module.css';
 import Button from '../components/Button';
 import FormControl from '../components/FormControl';
+import Dropzone from '../components/Dropzone';
+
+const API_URL =
+  import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/v1/api',
+  baseURL: API_URL,
   headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
 });
 
@@ -58,6 +62,7 @@ const Profile = () => {
           : event.target.value,
     });
   };
+
   const handleUpdate = async () => {
     setLoading(true);
     setError(null);
@@ -79,7 +84,8 @@ const Profile = () => {
       }
     } catch (error) {
       setError(
-        'An error occurred while updating your profile. Please try again.'
+        error.response?.data?.message ||
+          'An error occurred while updating your profile. Please try again.'
       );
       console.error(error);
     } finally {
@@ -210,6 +216,7 @@ const Profile = () => {
         </div>
         <div className={styles.Photos}>
           <h3>Photos</h3>
+          <Dropzone />
         </div>
       </div>
     </>
