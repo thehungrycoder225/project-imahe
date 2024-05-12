@@ -6,6 +6,7 @@ import FormControl from '../components/FormControl';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import Dropzone from 'react-dropzone';
+import { Link } from 'react-router-dom';
 
 function UserRegistration() {
   const [form, setForm] = useState({
@@ -21,7 +22,10 @@ function UserRegistration() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null); // Add message state variable
 
-  const API_URL = 'http://localhost:3000/v1/api/users';
+  const API_URL =
+    import.meta.env.VITE_REACT_APP_API_URL + '/users' ||
+    'http://localhost:3000/v1/api/users';
+  console.log(API_URL + '/users');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,7 +83,7 @@ function UserRegistration() {
         }));
         navigate('/register-success'); // Replace '/success' with the desired redirect path
       }
-      console.log(response.data);
+      console.log(response);
     } catch (error) {
       console.error(error);
       if (error.response) {
@@ -87,8 +91,9 @@ function UserRegistration() {
         // that falls out of the range of 2xx
         setError(
           error.response?.data?.message ||
-            'An error occurred while registering the user.'
+            'An error occurred while registering. Please try again.'
         );
+        console.log(error.response.data);
       } else if (error.request) {
         // The request was made but no response was received
         setError('Network error. Please check try again later');
@@ -109,53 +114,60 @@ function UserRegistration() {
       ) : message ? (
         <div className={style['toast-success']}>{message}</div> // Render success message when message is not null
       ) : null}
-      <form onSubmit={handleFormSubmit} className={style['form']}>
-        <div>
-          <img
-            src={imagePreviewUrl || 'https://via.placeholder.com/300'}
-            alt='Chosen Image'
-            className={style['responsive-image']}
-          />
-          <FormControl type='file' change={handleImageChange} />
-        </div>
-
-        <div>
+      <div className={style.container}>
+        <form onSubmit={handleFormSubmit} className={style['form']}>
+          <div>
+            <img
+              src={imagePreviewUrl || 'https://via.placeholder.com/400'}
+              alt='Chosen Image'
+              className={style['responsive-image']}
+            />
+            <FormControl type='file' change={handleImageChange} />
+          </div>
+          <div>
+            <FormControl
+              label='Email'
+              type='email'
+              id={'email'}
+              name={'email'}
+              value={form.email}
+              change={handleInputChange}
+            />
+          </div>
+          <div>
+            <FormControl
+              label='Student Number'
+              type='text'
+              name={'studentNumber'}
+              id={'studentNumber'}
+              value={form.studentNumber}
+              change={handleInputChange}
+            />
+          </div>
           <FormControl
-            label='Email'
-            type='email'
-            id={'email'}
-            name={'email'}
-            value={form.email}
-            change={handleInputChange}
-          />
-        </div>
-        <div>
-          <FormControl
-            label='Student Number'
+            label='Name'
+            id={'name'}
+            name={'name'}
             type='text'
-            name={'studentNumber'}
-            id={'studentNumber'}
-            value={form.studentNumber}
+            value={form.name}
             change={handleInputChange}
           />
-        </div>
-        <FormControl
-          label='Name'
-          id={'name'}
-          name={'name'}
-          type='text'
-          value={form.name}
-          change={handleInputChange}
-        />
-        <div>
-          <Button
-            type='submit'
-            text={'Register'}
-            size={'btn-block'}
-            color={'btn-primary'}
-          />
-        </div>
-      </form>
+          <div>
+            <Button
+              type='submit'
+              text={'Register'}
+              size={'btn-block'}
+              color={'btn-primary'}
+            />
+          </div>
+        </form>
+        <span>
+          Already Registered?
+          <span className={style['link-to']}>
+            <Link to='/login'>Login</Link>
+          </span>
+        </span>
+      </div>
     </div>
   );
 }

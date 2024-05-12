@@ -10,7 +10,7 @@ import ProfileGallery from '../components/ProfileGallery';
 import UploadImage from '../components/UploadImage';
 
 const API_URL =
-  import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
+  import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -122,7 +122,6 @@ const Profile = () => {
 
   const handleLogout = () => {
     logout(); // Use logout function from AuthContext
-    navigateTo('/');
   };
   return (
     <>

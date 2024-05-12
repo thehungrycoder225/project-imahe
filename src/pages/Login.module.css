@@ -7,22 +7,33 @@
 }
 
 .form {
-  width: 50%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 400px;
   margin-top: 2rem;
+  padding: 1rem;
 }
 
-@media screen and (max-width: 768px) {
-  .form {
-    width: 50%;
-  }
-}
 .text-center {
   text-align: center;
 }
 
 .text-danger {
   color: var(--danger);
+}
+
+.link-to {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 1rem;
+  transition: color 0.3s;
+}
+.link-to:hover {
+  color: var(--primary-dark);
+}
+
+@media screen and (max-width: 768px) {
+  .form {
+    width: 100%;
+  }
 }

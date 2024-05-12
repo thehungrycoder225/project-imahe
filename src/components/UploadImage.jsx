@@ -11,9 +11,10 @@ const UploadImage = () => {
   const [step, setStep] = useState(1);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState(false);
 
   const API_URL =
-    import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
+    import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
 
   const api = axios.create({
     baseURL: API_URL,
@@ -66,9 +67,11 @@ const UploadImage = () => {
 
     try {
       await api.post('/posts', formData);
+      console.log('Upload successful');
       setUploadSuccess(true);
     } catch (error) {
       console.error(error);
+      setUploadError(true);
     } finally {
       setUploading(false);
     }
@@ -83,6 +86,7 @@ const UploadImage = () => {
     <div className={styles.container}>
       {uploading && <Spinner />}
       {uploadSuccess && <p>Upload successful!</p>}
+      {uploadError && <p>Upload failed. Please try again.</p>}
       {step === 1 && (
         <div>
           <h2>Step 1: Add Image</h2>

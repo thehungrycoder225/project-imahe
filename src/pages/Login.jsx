@@ -6,6 +6,7 @@ import FormControl from '../components/FormControl';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import styles from './Login.module.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [studentNumber, setStudentNumber] = useState('');
@@ -16,7 +17,7 @@ const Login = () => {
 
   const { login, isAuthenticated } = useContext(AuthContext); // Use login from AuthContext
   const API_URL =
-    import.meta.VITE_REACT_APP_API_URL ||
+    import.meta.env.VITE_REACT_APP_API_URL + '/auth/login' ||
     'http://localhost:3000/v1/api/auth/login';
 
   const validateStudentNumber = (studentNumber) => {
@@ -125,6 +126,12 @@ const Login = () => {
           color={'btn-primary'}
         />
       </form>
+      <span>
+        Not yet registered?
+        <span className={styles['link-to']}>
+          <Link to='/register'> Register</Link>
+        </span>
+      </span>
     </div>
   );
 };

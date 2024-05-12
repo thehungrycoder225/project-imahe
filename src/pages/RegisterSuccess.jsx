@@ -7,7 +7,7 @@ function RegisterSuccess() {
       <p>🎉</p>
       <h1 className={styles.heading}>Registration Successful!</h1>
       <button className={`${styles['btn-base']} ${styles['btn-primary']}`}>
-        <Link to='/'>Login</Link>
+        <Link to='/login'>Login</Link>
       </button>
     </div>
   );

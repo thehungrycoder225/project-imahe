@@ -14,7 +14,7 @@ function ProfileGallery() {
   const { setUser, setIsAuthenticated } = useContext(AuthContext); // Use AuthContext
 
   const API_URL =
-    import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
+    import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
 
   const api = axios.create({
     baseURL: API_URL,
@@ -29,6 +29,7 @@ function ProfileGallery() {
       setUserPosts(response.data);
     } catch (error) {
       setError(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -45,13 +46,13 @@ function ProfileGallery() {
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error.message}</p>
+        <p> {error.response.data.error}</p>
       ) : userPosts && userPosts.length > 0 ? (
         <div className={styles['card-grid']}>
           {userPosts.map((post) => (
             <div key={post._id} className={styles.card}>
               <img
-                src={post.image}
+                src={post.url}
                 alt={post.title}
                 className={styles.galleryImage}
               />

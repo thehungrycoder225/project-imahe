@@ -8,12 +8,18 @@ function Gallery() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const imgRefs = useRef([]);
-  import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
+
+  const API_URL =
+    import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
+  const api = axios.create({
+    baseURL: API_URL,
+    headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
+  });
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/v1/api/posts');
+        const response = await api.get('/posts');
         setImages(response.data.postsImages);
         setLoading(false);
       } catch (err) {
