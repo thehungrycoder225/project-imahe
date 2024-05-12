@@ -6,6 +6,8 @@ import styles from './Profile.module.css';
 import Button from '../components/Button';
 import FormControl from '../components/FormControl';
 import Dropzone from '../components/Dropzone';
+import ProfileGallery from '../components/ProfileGallery';
+import UploadImage from '../components/UploadImage';
 
 const API_URL =
   import.meta.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api';
@@ -126,97 +128,107 @@ const Profile = () => {
     <>
       <h1 className={styles.title}>Portfolio</h1>
       <div className={styles.container}>
-        <div className={styles.Profile}>
+        <div className={styles.profile}>
           <div>
             <img
-              src={userData.image}
+              src={
+                userData.image ||
+                'https://images.unsplash.com/photo-1561948955-570b270e7c36?q=80&w=1801&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+              }
               alt={userData.image}
               className={styles['profile-image']}
             />
           </div>
           <div>
-            <h3>Student Number:</h3>
-            {editMode ? (
-              <FormControl
-                type={'text'}
-                name={'studentNumber'}
-                id={'studentNumber'}
-                value={userData.studentNumber}
-                disabled={true}
-                state={'disabled'}
-              />
-            ) : (
-              <p>{userData.studentNumber}</p>
-            )}
+            <div className={styles['profile-info']}>
+              <div>
+                <h3>Student Number:</h3>
+                {editMode ? (
+                  <FormControl
+                    type={'text'}
+                    name={'studentNumber'}
+                    id={'studentNumber'}
+                    value={userData.studentNumber}
+                    disabled={true}
+                    state={'disabled'}
+                  />
+                ) : (
+                  <p>{userData.studentNumber}</p>
+                )}
+              </div>
+              <div>
+                <h3>Name:</h3>
+                {editMode ? (
+                  <FormControl
+                    type={'text'}
+                    name={'name'}
+                    value={formValues.name}
+                    id={'name'}
+                    change={handleInputChange}
+                  />
+                ) : (
+                  <p>{userData.name}</p>
+                )}
+              </div>
+              <div>
+                <h3>Email:</h3>
+                {editMode ? (
+                  <FormControl
+                    type={'email'}
+                    name={'email'}
+                    value={formValues.email}
+                    id={'email'}
+                    change={handleInputChange}
+                  />
+                ) : (
+                  <p>{userData.email}</p>
+                )}
+              </div>
+            </div>
+            <div>
+              {editMode ? (
+                <>
+                  <Button
+                    click={handleUpdate}
+                    text={loading ? 'Saving...' : 'Save'}
+                    color={'btn-dark'}
+                    size={'btn-block'}
+                    disabled={loading}
+                  />
+                  <Button
+                    click={handleCancel}
+                    text={'Cancel'}
+                    size={'btn-block'}
+                    color={'btn-neutral'}
+                  />
+                </>
+              ) : (
+                <>
+                  <Button
+                    click={handleEdit}
+                    text={'Edit'}
+                    color={'btn-primary'}
+                    size={'btn-block'}
+                  />
+                  <Button
+                    click={handleLogout}
+                    text={'Logout'}
+                    size={'btn-block'}
+                    color={'btn-neutral'}
+                  />
+                </>
+              )}
+            </div>
           </div>
-          <div>
-            <h3>Name:</h3>
-            {editMode ? (
-              <FormControl
-                type={'text'}
-                name={'name'}
-                value={formValues.name}
-                id={'name'}
-                change={handleInputChange}
-              />
-            ) : (
-              <p>{userData.name}</p>
-            )}
-          </div>
-          <div>
-            <h3>Email:</h3>
-            {editMode ? (
-              <FormControl
-                type={'email'}
-                name={'email'}
-                value={formValues.email}
-                id={'email'}
-                change={handleInputChange}
-              />
-            ) : (
-              <p>{userData.email}</p>
-            )}
-          </div>
-
-          {editMode ? (
-            <>
-              <Button
-                click={handleUpdate}
-                text={loading ? 'Saving...' : 'Save'}
-                color={'btn-dark'}
-                size={'btn-block'}
-                disabled={loading}
-              />
-              <Button
-                click={handleCancel}
-                text={'Cancel'}
-                size={'btn-block'}
-                color={'btn-neutral'}
-              />
-            </>
-          ) : (
-            <>
-              <Button
-                click={handleEdit}
-                text={'Edit'}
-                color={'btn-primary'}
-                size={'btn-block'}
-              />
-              <Button
-                click={handleLogout}
-                text={'Logout'}
-                size={'btn-block'}
-                color={'btn-neutral'}
-              />
-            </>
-          )}
         </div>
+
         <div className={styles.Widgets}>
           <h3>Stats</h3>
         </div>
         <div className={styles.Photos}>
           <h3>Photos</h3>
-          <Dropzone />
+          <UploadImage />
+          <ProfileGallery />
         </div>
       </div>
     </>

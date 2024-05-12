@@ -1,0 +1,38 @@
+/* UploadImage.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+input[type='file'] {
+  margin-bottom: 1rem;
+}
+
+input[type='text'],
+textarea {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+button {
+  margin-right: 0.5rem;
+}
+
+.step1,
+.step2,
+.step3 {
+  display: none;
+}
+
+.step1.show,
+.step2.show,
+.step3.show {
+  display: block;
+}

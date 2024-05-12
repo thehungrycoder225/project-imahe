@@ -1,0 +1,118 @@
+/* RegisterSuccess.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.confetti {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: #f1f1f1;
+  overflow: hidden;
+}
+
+.confetti:before,
+.confetti:after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  background-color: #ffcc00;
+  border-radius: 50%;
+  animation: confetti-fall 2s infinite;
+}
+
+.confetti:before {
+  left: 25px;
+  animation-delay: 0.2s;
+}
+
+.confetti:after {
+  left: 50px;
+  animation-delay: 0.4s;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(200px) rotate(360deg);
+  }
+}
+
+.btn-base {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  border: transparent;
+  outline: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.btn {
+  background-color: var(--gray-dark);
+  color: var(--lighter);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-dark {
+  background-color: var(--dark);
+  color: var(--lighter);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+  outline: 1px solid var(--gray-dark);
+  background-color: var(--gray-dark);
+  color: var(--lighter);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--lighter);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  outline: 1px solid var(--primary-dark);
+  background-color: var(--primary-dark);
+  color: var(--lighter);
+}

@@ -5,6 +5,7 @@ import style from './UserRegistration.module.css';
 import FormControl from '../components/FormControl';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
+import Dropzone from 'react-dropzone';
 
 function UserRegistration() {
   const [form, setForm] = useState({
@@ -111,18 +112,13 @@ function UserRegistration() {
       <form onSubmit={handleFormSubmit} className={style['form']}>
         <div>
           <img
-            src={imagePreviewUrl}
+            src={imagePreviewUrl || 'https://via.placeholder.com/300'}
             alt='Chosen Image'
             className={style['responsive-image']}
           />
-          <FormControl
-            label='Image'
-            type='file'
-            id={'image'}
-            name={'image'}
-            change={handleImageChange}
-          />
+          <FormControl type='file' change={handleImageChange} />
         </div>
+
         <div>
           <FormControl
             label='Email'

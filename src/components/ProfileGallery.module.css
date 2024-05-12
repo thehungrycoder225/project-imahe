@@ -1,0 +1,82 @@
+.card {
+  width: 100%;
+  height: max-content;
+  border: transparent;
+
+  border-radius: 5px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.5s ease-in-out;
+  /* animation: slideIn 0.5s ease-in-out;
+    background-color: rgb(255, 240, 240); */
+  /* filter: blur(10px); */
+}
+
+.card img {
+  width: 100%;
+  /* aspect-ratio: 1/1; */
+  object-fit: cover;
+  object-position: 50% 50%;
+  border-radius: 5px 5px 0 0;
+  filter: saturate(50%) brightness(0.8);
+  transition: all 0.2s ease-in-out;
+}
+
+.card img:hover {
+  filter: saturate(100%) brightness(1);
+}
+
+.card:hover {
+  transition: all 0.2s ease-in-out;
+  filter: saturate(100%) brightness(1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: transparent;
+  /* & img {
+      aspect-ratio: 0;
+    } */
+}
+
+.card-info {
+  padding: 8px;
+}
+.card .title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card .description {
+  font-size: 14px;
+  color: #888;
+}
+
+.card .author {
+  font-size: 12px;
+  color: #888;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+  grid-template-rows: auto;
+  grid-gap: 16px;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-grid {
+  animation: slideIn 0.5s ease-in-out;
+}
