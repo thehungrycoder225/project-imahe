@@ -96,42 +96,44 @@ const Login = () => {
   return (
     <div className={`${styles.container}`}>
       <h1 className='main-title'>Imahe</h1>
-      <form className={`${styles.form}`} onSubmit={handleLogin}>
-        <div className={styles['text-center']}>
-          {loading ? (
-            <Spinner />
-          ) : (
-            error && <p className={styles['text-danger']}>{error}</p>
-          )}
-        </div>
-        <FormControl
-          label='Student Number'
-          id='studentNumber'
-          type='text'
-          value={studentNumber}
-          change={handleStudentNumberChange}
-        />
-        <FormControl
-          label='Password'
-          id='password'
-          type='password'
-          value={password}
-          change={handlePasswordChange}
-        />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <form className={`${styles.form}`} onSubmit={handleLogin}>
+            <div className={styles['text-center']}>
+              {error && <p className={styles['text-danger']}>{error}</p>}
+            </div>
+            <FormControl
+              label='Student Number'
+              id='studentNumber'
+              type='text'
+              value={studentNumber}
+              change={handleStudentNumberChange}
+            />
+            <FormControl
+              label='Password'
+              id='password'
+              type='password'
+              value={password}
+              change={handlePasswordChange}
+            />
 
-        <Button
-          text='Login'
-          click={handleLogin}
-          size={'btn-block'}
-          color={'btn-primary'}
-        />
-      </form>
-      <span>
-        Not yet registered?
-        <span className={styles['link-to']}>
-          <Link to='/register'> Register</Link>
-        </span>
-      </span>
+            <Button
+              text='Login'
+              click={handleLogin}
+              size={'btn-block'}
+              color={'btn-primary'}
+            />
+          </form>
+          <span>
+            Not yet registered?
+            <span className={styles['link-to']}>
+              <Link to='/register'> Register</Link>
+            </span>
+          </span>
+        </>
+      )}
     </div>
   );
 };
