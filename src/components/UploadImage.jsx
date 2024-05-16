@@ -90,7 +90,14 @@ const UploadImage = () => {
 
     try {
       await api.post('/posts', formData);
-      console.log('Upload successful');
+      if (image) {
+        setImage(null);
+        setImagePreviewUrl(null);
+        // reload image gallery component
+        window.location.reload();
+      } else {
+        setImageError('Please select an image.');
+      }
       setUploadSuccess(true);
     } catch (error) {
       console.error(error);
@@ -113,91 +120,98 @@ const UploadImage = () => {
 
   return (
     <div className={styles.container}>
-      {uploading && <Spinner />}
-      {uploadSuccess && <p>Upload successful!</p>}
-      {uploadError && <p>Upload failed. Please try again.</p>}
-      {step === 1 && (
-        <div>
-          <h2>Step 1: Add Image</h2>
-          <div className={styles['control-container']}>
-            {imageError && <div className={styles.error}>{imageError}</div>}
-            <FormControl
-              label='Image'
-              type={'file'}
-              change={handleImageChange}
-              error={imageError}
-            />
-            <button
-              onClick={handleNextStep}
-              className={`${styles.btn} ${styles['btn-primary']}`}
-            >
-              Next
-            </button>
-          </div>
+      {uploading ? (
+        <Spinner />
+      ) : (
+        <>
+          {step === 1 && (
+            <div>
+              <h2>Step 1: Add Image</h2>
+              <div className={styles['control-container']}>
+                {imageError && <div className={styles.error}>{imageError}</div>}
+                <FormControl
+                  label='Image'
+                  type={'file'}
+                  change={handleImageChange}
+                  error={imageError}
+                />
+                <button
+                  onClick={handleNextStep}
+                  className={`${styles.btn} ${styles['btn-primary']}`}
+                >
+                  Next
+                </button>
+              </div>
 
-          <div className={styles['image-container']}>
-            {imagePreviewUrl && (
-              <img
-                src={imagePreviewUrl}
-                alt='Preview'
-                className={styles.preview}
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div>
-          <h2>Step 2: Add Title</h2>
-          {titleError && <div className={styles.error}>{titleError}</div>}
-          <FormControl type={'text'} label='Title' change={handleTitleChange} />
-          <button
-            onClick={handlePreviousStep}
-            className={`${styles.btn} ${styles['btn-neutral']}`}
-          >
-            Previous
-          </button>
-          <button
-            onClick={handleNextStep}
-            className={`${styles.btn} ${styles['btn-primary']}`}
-          >
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div>
-          <h2>Step 3: Add Description</h2>
-          {descriptionError && (
-            <div className={styles.error}>{descriptionError}</div>
+              <div className={styles['image-container']}>
+                {imagePreviewUrl && (
+                  <img
+                    src={imagePreviewUrl}
+                    alt='Preview'
+                    className={styles.preview}
+                  />
+                )}
+              </div>
+            </div>
           )}
-          <FormControl
-            type={'text'}
-            label='Description'
-            change={handleDescriptionChange}
-          />
-          <button
-            onClick={handleSave}
-            className={`${styles.btn} ${styles['btn-primary']}`}
-          >
-            Save
-          </button>
-          <button
-            onClick={handlePreviousStep}
-            className={`${styles.btn} ${styles['btn-neutral']}`}
-          >
-            Previous
-          </button>
 
-          <button
-            onClick={handleCancel}
-            className={`${styles.btn} ${styles['btn-neutral']}`}
-          >
-            Cancel
-          </button>
-        </div>
+          {step === 2 && (
+            <div>
+              <h2>Step 2: Add Title</h2>
+              {titleError && <div className={styles.error}>{titleError}</div>}
+              <FormControl
+                type={'text'}
+                label='Title'
+                change={handleTitleChange}
+              />
+              <button
+                onClick={handlePreviousStep}
+                className={`${styles.btn} ${styles['btn-neutral']}`}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNextStep}
+                className={`${styles.btn} ${styles['btn-primary']}`}
+              >
+                Next
+              </button>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div>
+              <h2>Step 3: Add Description</h2>
+              {descriptionError && (
+                <div className={styles.error}>{descriptionError}</div>
+              )}
+              <FormControl
+                type={'text'}
+                label='Description'
+                change={handleDescriptionChange}
+              />
+              <button
+                onClick={handleSave}
+                className={`${styles.btn} ${styles['btn-primary']}`}
+              >
+                Save
+              </button>
+              <button
+                onClick={handlePreviousStep}
+                className={`${styles.btn} ${styles['btn-neutral']}`}
+              >
+                Previous
+              </button>
+
+              <button
+                onClick={handleCancel}
+                className={`${styles.btn} ${styles['btn-neutral']}`}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

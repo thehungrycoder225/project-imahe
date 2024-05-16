@@ -22,6 +22,12 @@
   border-radius: 8px;
 }
 
+.image-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 .error {
   color: var(--danger);
   margin-bottom: 1rem;
@@ -34,14 +40,6 @@ h2 {
 
 input[type='file'] {
   margin-bottom: 1rem;
-}
-
-img {
-  margin-bottom: 1rem;
-  width: 100%;
-  aspect-ratio: 2/1;
-  object-fit: contain;
-  border-radius: 4px;
 }
 
 input[type='text'],
