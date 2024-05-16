@@ -128,7 +128,7 @@ const Profile = () => {
       <h1 className={styles.title}>Portfolio</h1>
       <div className={styles.container}>
         <div className={styles.profile}>
-          <div>
+          <div className={styles['profile-image-container']}>
             <img
               src={
                 userData.image ||
@@ -138,9 +138,10 @@ const Profile = () => {
               className={styles['profile-image']}
             />
           </div>
-          <div>
+          <div className={styles['profile-info-container']}>
             <div className={styles['profile-info']}>
               <div>
+                <h2>Student Details</h2>
                 <h3>Student Number:</h3>
                 {editMode ? (
                   <FormControl
@@ -184,7 +185,7 @@ const Profile = () => {
                 )}
               </div>
             </div>
-            <div>
+            <div className={styles['profile-action-container']}>
               {editMode ? (
                 <>
                   <Button
@@ -205,7 +206,7 @@ const Profile = () => {
                 <>
                   <Button
                     click={handleEdit}
-                    text={'Edit'}
+                    text={'Update Profile'}
                     color={'btn-primary'}
                     size={'btn-block'}
                   />
@@ -221,12 +222,12 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className={styles.Widgets}>
-          <h3>Stats</h3>
-        </div>
-        <div className={styles.Photos}>
-          <h3>Photos</h3>
+        <div className={styles}>
+          <h3>Upload Photo</h3>
           <UploadImage />
+        </div>
+        <div className={styles}>
+          <h3>My Gallery</h3>
           <ProfileGallery />
         </div>
       </div>

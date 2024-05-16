@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import styles from './UploadImage.module.css';
 import Spinner from './Spinner';
+import FormControl from './FormControl';
 
 const UploadImage = () => {
   const [image, setImage] = useState(null);
@@ -12,6 +13,9 @@ const UploadImage = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState(false);
+  const [imageError, setImageError] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   const API_URL =
     import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
@@ -26,6 +30,7 @@ const UploadImage = () => {
       setImage(event.target.files[0]);
       setImagePreviewUrl(URL.createObjectURL(event.target.files[0]));
     }
+    setImageError(null);
   };
   const handleTitleChange = (event) => {
     if (event.target.value.length <= 50) {
@@ -39,22 +44,40 @@ const UploadImage = () => {
     setStep(step - 1);
   };
 
+  const validateImage = () => {
+    return !!image;
+  };
+
+  const validateTitle = () => {
+    return title.trim() !== '';
+  };
+
+  const validateDescription = () => {
+    return description.trim() !== '';
+  };
+
   const handleNextStep = () => {
-    if (step === 1 && !image) {
-      alert('Please select an image.');
+    if (step === 1 && !validateImage()) {
+      setImageError('Please select an image.');
       return;
+    } else {
+      setImageError('');
     }
-    if (step === 2 && title.trim() === '') {
-      alert('Please enter a title.');
+    if (step === 2 && !validateTitle()) {
+      setTitleError('Please enter a title.');
       return;
+    } else {
+      setTitleError('');
     }
     setStep(step + 1);
   };
 
   const handleSave = async () => {
-    if (description.trim() === '') {
-      alert('Please enter a description.');
+    if (!validateDescription()) {
+      setDescriptionError('Please enter a description.');
       return;
+    } else {
+      setDescriptionError('');
     }
 
     const formData = new FormData();
@@ -78,8 +101,14 @@ const UploadImage = () => {
   };
 
   const handleCancel = () => {
-    // Perform cancel logic here
-    // Reset the form or navigate to another page
+    setImage(null);
+    setImagePreviewUrl(null);
+    setTitle('');
+    setDescription('');
+    setStep(1);
+    setUploading(false);
+    setUploadSuccess(false);
+    setUploadError(false);
   };
 
   return (
@@ -90,28 +119,84 @@ const UploadImage = () => {
       {step === 1 && (
         <div>
           <h2>Step 1: Add Image</h2>
-          <input type='file' accept='image/*' onChange={handleImageChange} />
-          {imagePreviewUrl && <img src={imagePreviewUrl} alt='Preview' />}
-          <button onClick={handleNextStep}>Next</button>
+          <div className={styles['control-container']}>
+            {imageError && <div className={styles.error}>{imageError}</div>}
+            <FormControl
+              label='Image'
+              type={'file'}
+              change={handleImageChange}
+              error={imageError}
+            />
+            <button
+              onClick={handleNextStep}
+              className={`${styles.btn} ${styles['btn-primary']}`}
+            >
+              Next
+            </button>
+          </div>
+
+          <div className={styles['image-container']}>
+            {imagePreviewUrl && (
+              <img
+                src={imagePreviewUrl}
+                alt='Preview'
+                className={styles.preview}
+              />
+            )}
+          </div>
         </div>
       )}
 
       {step === 2 && (
         <div>
           <h2>Step 2: Add Title</h2>
-          <input type='text' value={title} onChange={handleTitleChange} />
-          <button onClick={handlePreviousStep}>Previous</button>
-          <button onClick={handleNextStep}>Next</button>
+          {titleError && <div className={styles.error}>{titleError}</div>}
+          <FormControl type={'text'} label='Title' change={handleTitleChange} />
+          <button
+            onClick={handlePreviousStep}
+            className={`${styles.btn} ${styles['btn-neutral']}`}
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNextStep}
+            className={`${styles.btn} ${styles['btn-primary']}`}
+          >
+            Next
+          </button>
         </div>
       )}
 
       {step === 3 && (
         <div>
           <h2>Step 3: Add Description</h2>
-          <textarea value={description} onChange={handleDescriptionChange} />
-          <button onClick={handlePreviousStep}>Previous</button>
-          <button onClick={handleSave}>Save</button>
-          <button onClick={handleCancel}>Cancel</button>
+          {descriptionError && (
+            <div className={styles.error}>{descriptionError}</div>
+          )}
+          <FormControl
+            type={'text'}
+            label='Description'
+            change={handleDescriptionChange}
+          />
+          <button
+            onClick={handleSave}
+            className={`${styles.btn} ${styles['btn-primary']}`}
+          >
+            Save
+          </button>
+          <button
+            onClick={handlePreviousStep}
+            className={`${styles.btn} ${styles['btn-neutral']}`}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={handleCancel}
+            className={`${styles.btn} ${styles['btn-neutral']}`}
+          >
+            Cancel
+          </button>
         </div>
       )}
     </div>

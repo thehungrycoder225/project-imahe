@@ -87,3 +87,19 @@
 .card-grid {
   animation: slideIn 0.5s ease-in-out;
 }
+
+.lazy {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.gallery-title {
+  font-size: 64px;
+  font-weight: bold;
+  margin: 20px 0;
+  font-family: 'Adeptly', sans-serif;
+}

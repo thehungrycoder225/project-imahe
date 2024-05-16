@@ -55,9 +55,21 @@ function Gallery() {
     };
   }, [images]);
 
+  const handleObserver = (entities) => {
+    const target = entities[0];
+    if (target.isIntersecting) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  if (loading) return <Spinner />;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div>
-      <h1>Gallery</h1>
+      <h1 className={`${styles['gallery-title']} ${styles['text-center']}`}>
+        Imahe
+      </h1>
       <div className={styles['card-grid']}>
         {loading ? (
           <Spinner />
