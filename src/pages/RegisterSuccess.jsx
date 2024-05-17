@@ -10,8 +10,16 @@ function RegisterSuccess() {
       </Helmet>
       <p>🎉</p>
       <h1 className={styles.heading}>Registration Successful!</h1>
+      <p className={styles.text}>
+        You&apos;ve successfully created an account. Your credentials have been
+        delivered to your email.
+      </p>
       <button className={`${styles['btn-base']} ${styles['btn-primary']}`}>
         <Link to='/login'>Login</Link>
+      </button>
+      or
+      <button className={`${styles['btn-base']} ${styles['btn-secondary']}`}>
+        <Link to='/'>Go to Gallery</Link>
       </button>
     </div>
   );

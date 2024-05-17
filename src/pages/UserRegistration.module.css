@@ -15,7 +15,8 @@
 
 .responsive-image {
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  width: 100%;
+  object-fit: contain;
   object-position: 50% 50%;
   margin-bottom: 1rem;
   border-radius: 8px;

@@ -55,7 +55,16 @@ function Gallery() {
     };
   }, [images]);
 
-  if (loading) return <Spinner />;
+  console.log(images);
+
+  if (loading)
+    return (
+      <>
+        <div className={styles['spinner-container']}>
+          <Spinner />
+        </div>
+      </>
+    );
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -68,7 +77,9 @@ function Gallery() {
       </h1>
       <div className={styles['card-grid']}>
         {loading ? (
-          <Spinner />
+          <div className={styles['spinner-container']}>
+            <Spinner />
+          </div>
         ) : (
           images.map((image, index) => (
             <div key={image._id} className={styles.card}>

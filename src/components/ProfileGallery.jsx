@@ -8,8 +8,7 @@ import Button from './Button';
 import Spinner from './Spinner';
 
 function ProfileGallery() {
-  const { user, logout } = useContext(AuthContext); // Use logout from AuthContext
-  const [userData, setUserData] = useState(user);
+  const { user } = useContext(AuthContext); // Use logout from AuthContext
   const [userPosts, setUserPosts] = useState(); // Add userPosts state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -132,11 +131,18 @@ function ProfileGallery() {
   return (
     <div>
       {loading ? (
-        <p>Fetching Posts</p>
+        <>
+          <div className={styles['spinner-container']}>
+            <Spinner />
+            <div>
+              <p>Loading...</p>
+            </div>
+          </div>
+        </>
       ) : error ? (
         <p> {error.response.data.error}</p>
       ) : userPosts && userPosts.length > 0 ? (
-        <div className={styles['card-grid']}>
+        <div className={styles['image-container']}>
           {userPosts.map((post) => (
             <div key={post._id} className={styles.card}>
               {editingPost && editingPost._id === post._id ? (
