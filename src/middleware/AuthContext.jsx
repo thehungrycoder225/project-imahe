@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('x-auth-token');
     localStorage.removeItem('isAuthenticated');
   };
 

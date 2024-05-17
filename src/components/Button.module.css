@@ -67,6 +67,20 @@
   background-color: var(--neutral-dark);
   color: var(--gray);
 }
+
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--lighter);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  outline: 1px solid var(--danger);
+  background-color: var(--danger-dark);
+  color: var(--lighter);
+}
 /* Responsive Styles */
 
 @media screen and (max-width: 768px) {

@@ -16,9 +16,7 @@ const Login = () => {
   const navigateTo = useNavigate();
 
   const { login, isAuthenticated } = useContext(AuthContext); // Use login from AuthContext
-  const API_URL =
-    import.meta.env.VITE_REACT_APP_API_URL + '/auth/login' ||
-    'http://localhost:3000/v1/api/auth/login';
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL + '/auth/login';
 
   const validateStudentNumber = (studentNumber) => {
     const studentNumberRegex = /^[a-zA-Z0-9]+$/;
@@ -69,7 +67,6 @@ const Login = () => {
 
       if (response.status === 200) {
         const { token, user } = response.data;
-        sessionStorage.setItem('x-auth-token', token);
         localStorage.setItem('x-auth-token', token);
         login(user); // Use login function from AuthContext
       } else {

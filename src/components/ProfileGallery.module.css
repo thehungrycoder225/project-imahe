@@ -6,7 +6,7 @@
   border-radius: 5px 5px 0 0;
 }
 
-.card:hover {
+/* .card:hover {
   transition: all 0.2s ease-in-out;
   transform: translateY(-5px) scale(1.02);
   backdrop-filter: blur(10px);
@@ -16,7 +16,6 @@
   /* & img {
     aspect-ratio: 0;
   } */
-}
 
 .card-info {
   padding: 8px;

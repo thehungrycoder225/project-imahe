@@ -1,5 +1,5 @@
 :root {
-  --container-padding: 3.2rem;
+  --container-padding: 0 3.2rem;
   --container-gap: 2rem;
   --profile-image-width: 100%;
   --profile-image-margin-bottom: 1rem;
@@ -16,7 +16,10 @@
 }
 
 .title {
-  margin: auto;
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  padding: 1rem;
 }
 
 .profile {
@@ -37,6 +40,48 @@
 .profile-info-container {
 }
 
+.profile-alert-success {
+  background-color: var(--success);
+  color: var(--neutral);
+  padding: 1rem;
+  border-radius: var(--profile-border-radius);
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.profile-alert-error {
+  background-color: var(--danger);
+  color: var(--neutral);
+  padding: 1rem;
+  border-radius: var(--profile-border-radius);
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.profile-alert-success button,
+.profile-alert-error button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem;
+}
+
+.profile-alert-container {
+  display: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .profile-image {
   max-width: var(--profile-image-width);
   aspect-ratio: 4/3;
@@ -52,7 +97,21 @@
   color: #707070;
 }
 
+@media screen and (max-width: 1200px) {
+  .profile {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+}
+
 @media screen and (max-width: 768px) {
+  .profile {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
   .profile {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;

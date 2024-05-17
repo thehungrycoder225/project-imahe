@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import styles from './Gallery.module.css';
 import Spinner from '../components/Spinner';
+import Masonry from 'masonry-layout';
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -9,8 +10,7 @@ function Gallery() {
   const [error, setError] = useState(null);
   const imgRefs = useRef([]);
 
-  const API_URL =
-    import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
   const api = axios.create({
     baseURL: API_URL,
     headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
@@ -29,6 +29,19 @@ function Gallery() {
     };
 
     fetchImages();
+  }, []);
+
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    if (gridRef.current) {
+      new Masonry(gridRef.current, {
+        itemSelector: `.${styles.card}`,
+        columnWidth: `.${styles.card}`,
+        fitWidth: true,
+        gutter: 20,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -70,7 +83,7 @@ function Gallery() {
       <h1 className={`${styles['gallery-title']} ${styles['text-center']}`}>
         Imahe
       </h1>
-      <div className={styles['card-grid']}>
+      <div ref={gridRef} className={styles['card-grid']}>
         {loading ? (
           <Spinner />
         ) : (

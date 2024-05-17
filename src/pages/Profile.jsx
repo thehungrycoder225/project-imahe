@@ -9,8 +9,7 @@ import Dropzone from '../components/Dropzone';
 import ProfileGallery from '../components/ProfileGallery';
 import UploadImage from '../components/UploadImage';
 
-const API_URL =
-  import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:3000/v1/api/';
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 const api = axios.create({
   baseURL: API_URL,
@@ -24,31 +23,29 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const { setUser, setIsAuthenticated } = useContext(AuthContext); // Use AuthContext
-  const navigateTo = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timerId = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+
+      return () => clearTimeout(timerId);
+    } else if (countdown === 0) {
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }
+  }, [countdown]);
 
   const [formValues, setFormValues] = useState({
     name: user.name,
     email: user.email,
-    avatar: null,
+    studentNumber: user.studentNumber,
+    image: user.image,
   });
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await api.get(`/users/${user._id}`);
-      setUserData(response.data);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user && user._id) {
-      fetchData();
-    }
-  }, [fetchData, user]);
 
   const handleEdit = () => {
     setEditMode(true);
@@ -65,31 +62,33 @@ const Profile = () => {
     });
   };
 
+  // Update user data in the database
   const handleUpdate = async () => {
     setLoading(true);
-    setError(null);
-
-    // Create a new FormData object
-    const formData = new FormData();
-
-    // Append the data you want to send
-    Object.keys(formValues).forEach((key) => {
-      formData.append(key, formValues[key]);
-    });
-
     try {
-      // Send a PUT request with the FormData object
-      const response = await api.put(`/users/${user._id}`, formData);
+      const formData = new FormData();
+      formData.append('name', formValues.name);
+      formData.append('email', formValues.email);
+      formData.append('studentNumber', formValues.studentNumber);
+      formData.append('image', formValues.image);
+
+      const response = await api.put(`users/${user._id}`, formData);
+
       if (response.status === 200) {
-        setUserData(response.data);
+        setUser(response.data.user);
+        setUserData(response.data.user);
+        setSuccessMessage('Profile updated successfully');
+        localStorage.setItem('user', JSON.stringify(response.data.user));
         setEditMode(false);
+        setCountdown(5);
+      } else {
+        throw new Error('Failed to update profile');
       }
     } catch (error) {
       setError(
-        error.response?.data?.message ||
-          'An error occurred while updating your profile. Please try again.'
+        error.response.data ? error.response.data.message : error.message
       );
-      console.error(error);
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
@@ -99,33 +98,24 @@ const Profile = () => {
     setEditMode(false);
   };
 
-  const handleCreateAlbum = async () => {
-    try {
-      const response = await api.post('/albums', { name: 'New Album' });
-      setUserData({
-        ...userData,
-        albums: [...userData.albums, response.data],
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleUploadImage = async (albumId, image) => {
-    try {
-      const response = await api.post(`/albums/${albumId}/images`, { image });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleLogout = () => {
     logout(); // Use logout function from AuthContext
   };
   return (
     <>
       <h1 className={styles.title}>Portfolio</h1>
+      {successMessage && (
+        <div className={styles['profile-alert-success']}>
+          {successMessage} Dismiss in {countdown} seconds.
+          <button onClick={() => setSuccessMessage(null)}>x</button>
+        </div>
+      )}
+      {errorMessage && (
+        <div className={styles['profile-alert-success']}>
+          {errorMessage} Dismiss in {countdown} seconds.
+          <button onClick={() => setErrorMessage(null)}>x</button>
+        </div>
+      )}
       <div className={styles.container}>
         <div className={styles.profile}>
           <div className={styles['profile-image-container']}>
