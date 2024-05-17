@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import styles from './Login.module.css';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const Login = () => {
   const [studentNumber, setStudentNumber] = useState('');
@@ -93,6 +94,10 @@ const Login = () => {
   return (
     <div className={`${styles.container}`}>
       <h1 className='main-title'>Imahe</h1>
+      <Helmet>
+        <title>Imahe | Login</title>
+      </Helmet>
+
       {loading ? (
         <Spinner />
       ) : (

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import styles from './Gallery.module.css';
 import Spinner from '../components/Spinner';
-import Masonry from 'masonry-layout';
+import { Helmet } from 'react-helmet';
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -31,19 +31,6 @@ function Gallery() {
     fetchImages();
   }, []);
 
-  const gridRef = useRef(null);
-
-  useEffect(() => {
-    if (gridRef.current) {
-      new Masonry(gridRef.current, {
-        itemSelector: `.${styles.card}`,
-        columnWidth: `.${styles.card}`,
-        fitWidth: true,
-        gutter: 20,
-      });
-    }
-  }, []);
-
   useEffect(() => {
     imgRefs.current = imgRefs.current.slice(0, images.length);
 
@@ -68,22 +55,18 @@ function Gallery() {
     };
   }, [images]);
 
-  const handleObserver = (entities) => {
-    const target = entities[0];
-    if (target.isIntersecting) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
   if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
+      <Helmet>
+        <title>Imahe | Gallery</title>
+      </Helmet>
       <h1 className={`${styles['gallery-title']} ${styles['text-center']}`}>
         Imahe
       </h1>
-      <div ref={gridRef} className={styles['card-grid']}>
+      <div className={styles['card-grid']}>
         {loading ? (
           <Spinner />
         ) : (

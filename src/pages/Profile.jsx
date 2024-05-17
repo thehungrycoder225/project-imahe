@@ -8,6 +8,7 @@ import FormControl from '../components/FormControl';
 import Dropzone from '../components/Dropzone';
 import ProfileGallery from '../components/ProfileGallery';
 import UploadImage from '../components/UploadImage';
+import { Helmet } from 'react-helmet';
 
 const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -103,6 +104,9 @@ const Profile = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Imahe | {user.name}</title>
+      </Helmet>
       <h1 className={styles.title}>Portfolio</h1>
       {successMessage && (
         <div className={styles['profile-alert-success']}>

@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import Dropzone from 'react-dropzone';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 function UserRegistration() {
   const [form, setForm] = useState({
@@ -115,6 +116,9 @@ function UserRegistration() {
         <div className={style['toast-success']}>{message}</div> // Render success message when message is not null
       ) : null}
       <div className={style.container}>
+        <Helmet>
+          <title>Imahe | Register</title>
+        </Helmet>
         <form onSubmit={handleFormSubmit} className={style['form']}>
           <div>
             <img
