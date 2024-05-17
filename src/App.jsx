@@ -7,6 +7,7 @@ import { AuthProvider } from './middleware/AuthContext';
 import PrivateRoute from './routes/PrivateRoute';
 import RegisterSuccess from './pages/RegisterSuccess';
 import Gallery from './pages/Gallery';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           </Routes>
         </Router>
       </AuthProvider>
+      <Footer />
     </div>
   );
 }

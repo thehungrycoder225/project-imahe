@@ -82,7 +82,13 @@
 
 /* Responsive design */
 
-@media screen and (min-width: 600px) and (max-width: 900px) {
+@media (max-width: 768px) {
+  .image-container {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
   .image-container {
     column-count: 1;
   }

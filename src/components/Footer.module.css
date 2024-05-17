@@ -1,0 +1,20 @@
+/* Footer styles */
+.footer {
+  width: 100%;
+  padding: 2rem;
+  margin-top: 1rem;
+  padding: 16px;
+  text-align: center;
+  font-weight: 700;
+  color: #888;
+  overflow: hidden;
+}
+
+.footer p {
+  font-size: 12px;
+}
+
+.footer img {
+  display: inline-block;
+  width: 30px;
+}
