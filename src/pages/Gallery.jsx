@@ -132,20 +132,24 @@ function Gallery() {
           >
             x
           </button>
-          <div className='modal-grid'>
-            <h1>
-              {selectedPost
-                ? selectedPost.title
-                : authorPosts[0]?.author.name + "'s posts"}
-            </h1>
+          <div className='modal-container'>
+            <div>
+              <h1>
+                {selectedPost
+                  ? selectedPost.title
+                  : authorPosts[0]?.author.name + "'s posts"}
+              </h1>
+            </div>
             {selectedPost ? (
-              <>
-                <div>
-                  <img
-                    src={selectedPost.url}
-                    alt={selectedPost.title}
-                    className={'modal-hd-image'}
-                  />
+              <div>
+                <div className='container'>
+                  <div className='card'>
+                    <img
+                      src={selectedPost.url}
+                      alt={selectedPost.title}
+                      className=''
+                    />
+                  </div>
                 </div>
                 <button
                   onClick={() => setSelectedPost(null)}
@@ -153,18 +157,20 @@ function Gallery() {
                 >
                   Back to posts
                 </button>
-              </>
+              </div>
             ) : (
-              authorPosts.map((post) => (
-                <div
-                  key={post._id}
-                  onClick={() => handlePostClick(post)}
-                  className='modal-card'
-                >
-                  <img src={post.url} alt={post.title} />
-                  <h3>{post.title}</h3>
-                </div>
-              ))
+              <div className='card-container'>
+                {authorPosts.map((post) => (
+                  <div
+                    key={post._id}
+                    onClick={() => handlePostClick(post)}
+                    className='card'
+                  >
+                    <img src={post.url} alt={post.title} />
+                    <h3 className='card-info '>{post.title}</h3>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </Modal>

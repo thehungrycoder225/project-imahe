@@ -4,8 +4,10 @@ const Modal = ({ children, visible, onClose }) => {
   if (!visible) return null;
 
   return (
-    <div className='modal-overlay'>
-      <div className='modal'>{children}</div>
+    <div className='modal'>
+      <div className='overlay'>
+        <div className='modal-content'>{children}</div>
+      </div>
     </div>
   );
 };

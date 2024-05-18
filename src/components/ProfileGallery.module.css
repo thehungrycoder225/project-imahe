@@ -25,7 +25,6 @@
 }
 
 .card img {
-  width: 100%;
   object-fit: cover;
   object-position: 50% 50%;
   border-radius: 5px 5px 0 0;
