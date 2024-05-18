@@ -126,7 +126,11 @@ function UserRegistration() {
               alt='Chosen Image'
               className={style['responsive-image']}
             />
-            <FormControl type='file' change={handleImageChange} />
+            <FormControl
+              type='file'
+              label={'Choose Profile Image '}
+              change={handleImageChange}
+            />
           </div>
           <div>
             <FormControl
