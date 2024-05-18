@@ -13,7 +13,6 @@
 
 .modal {
   background: #f0f0f0;
-  position: relative;
   padding: 2em;
   border-radius: 10px;
   max-width: 80%;
@@ -25,8 +24,16 @@
 
 .modal img,
 .modal-hd-image {
+  max-width: 100%;
   object-fit: cover;
   margin-bottom: 1em;
+}
+
+.modal-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-close-button {
@@ -84,6 +91,6 @@
 
 @media screen and (max-width: 768px) {
   .modal-grid {
-    column-count: 2;
+    column-count: 1;
   }
 }

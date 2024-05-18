@@ -154,7 +154,11 @@ function Gallery() {
               </>
             ) : (
               authorPosts.map((post) => (
-                <div key={post._id} onClick={() => handlePostClick(post)}>
+                <div
+                  key={post._id}
+                  onClick={() => handlePostClick(post)}
+                  className='modal-card'
+                >
                   <img src={post.url} alt={post.title} />
                   <h3>{post.title}</h3>
                 </div>
