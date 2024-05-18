@@ -69,6 +69,7 @@ function Gallery() {
     (authorId) => {
       setIsModalVisible(true);
       fetchAuthorPostsCallback(authorId);
+      document.body.style.overflow = 'hidden'; // Add this line
     },
     [fetchAuthorPostsCallback]
   );
@@ -122,7 +123,10 @@ function Gallery() {
         ))}
         <Modal
           visible={isModalVisible}
-          onClose={() => setIsModalVisible(false)}
+          onClose={() => {
+            setIsModalVisible(false);
+            document.body.style.overflow = 'auto'; // Add this line
+          }}
         >
           <button
             className='modal-close-button'
