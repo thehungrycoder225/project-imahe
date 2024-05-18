@@ -128,17 +128,16 @@ function Gallery() {
             className='modal-close-button'
             onClick={() => setIsModalVisible(false)}
           >
-            X
+            x
           </button>
           <div className='modal-grid'>
+            <h1>
+              {selectedPost
+                ? selectedPost.title
+                : authorPosts[0]?.author.name + "'s posts"}
+            </h1>
             {selectedPost ? (
               <>
-                <button
-                  onClick={() => setSelectedPost(null)}
-                  className='modal-return-button '
-                >
-                  Back to posts
-                </button>
                 <div>
                   <img
                     src={selectedPost.url}
@@ -146,6 +145,12 @@ function Gallery() {
                     className={'modal-hd-image'}
                   />
                 </div>
+                <button
+                  onClick={() => setSelectedPost(null)}
+                  className='modal-return-button '
+                >
+                  Back to posts
+                </button>
               </>
             ) : (
               authorPosts.map((post) => (
