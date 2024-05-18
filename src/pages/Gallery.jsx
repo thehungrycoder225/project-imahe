@@ -69,7 +69,6 @@ function Gallery() {
     (authorId) => {
       setIsModalVisible(true);
       fetchAuthorPostsCallback(authorId);
-      document.body.style.overflow = 'hidden'; // Add this line
     },
     [fetchAuthorPostsCallback]
   );
@@ -125,7 +124,6 @@ function Gallery() {
           visible={isModalVisible}
           onClose={() => {
             setIsModalVisible(false);
-            document.body.style.overflow = 'auto'; // Add this line
           }}
         >
           <button
