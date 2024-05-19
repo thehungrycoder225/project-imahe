@@ -134,7 +134,7 @@ function Gallery() {
           </button>
           <div className='modal-container'>
             <div>
-              <h1>
+              <h1 className='text-center'>
                 {selectedPost
                   ? selectedPost.title
                   : authorPosts[0]?.author.name + "'s posts"}
@@ -149,6 +149,10 @@ function Gallery() {
                       alt={selectedPost.title}
                       className=''
                     />
+                    <h3 className='card-info'>Description</h3>
+                    <p className='card-info text-center '>
+                      {selectedPost.description}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -167,7 +171,9 @@ function Gallery() {
                     className='card'
                   >
                     <img src={post.url} alt={post.title} />
-                    <h3 className='card-info '>{post.title}</h3>
+                    <h3 className='card-info text-center m-auto'>
+                      {post.title}
+                    </h3>
                   </div>
                 ))}
               </div>

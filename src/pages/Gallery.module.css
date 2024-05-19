@@ -29,6 +29,10 @@
   } */
 }
 
+.text-center {
+  text-align: center;
+}
+
 .card-info {
   padding: 8px;
 }
@@ -36,6 +40,10 @@
 .card .title {
   font-size: 18px;
   font-weight: bold;
+}
+
+.m-auto {
+  margin: auto;
 }
 
 .card .description {
