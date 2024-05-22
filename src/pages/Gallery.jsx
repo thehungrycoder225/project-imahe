@@ -177,7 +177,7 @@ function Gallery() {
                           alt={selectedPost.title}
                           className=''
                         />
-                        <p className='card-info text-description text-center '>
+                        <p className='text-selected-post-description  '>
                           {selectedPost.description}
                         </p>
                       </div>
@@ -185,7 +185,6 @@ function Gallery() {
                     <button
                       onClick={() => {
                         setSelectedPost(null);
-                        setAuthorPosts([]);
                       }}
                       className='modal-return-button '
                     >

@@ -27,6 +27,7 @@ const Profile = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [countdown, setCountdown] = useState(null);
+  const [imageError, setImageError] = useState(null);
 
   useEffect(() => {
     if (countdown > 0) {

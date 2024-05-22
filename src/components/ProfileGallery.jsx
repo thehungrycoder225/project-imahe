@@ -14,6 +14,7 @@ function ProfileGallery() {
   const [error, setError] = useState(null);
   const [editingPost, setEditingPost] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [imageError, setImageError] = useState(null);
   const [formValues, setFormValues] = useState({
     title: '',
     description: '',
@@ -60,6 +61,20 @@ function ProfileGallery() {
   const handleInputChange = (event) => {
     if (event.target.type === 'file') {
       const file = event.target.files[0];
+      if (!file) {
+        setImageError('Please select a file');
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        setImageError('Please select an image file');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        // 2MB
+        setImageError('File size should not exceed 2MB');
+        return;
+      }
+      setImageError(null); // clear any previous error
       setFormValues({ ...formValues, [event.target.name]: file });
 
       const reader = new FileReader();
@@ -71,6 +86,7 @@ function ProfileGallery() {
       setFormValues({ ...formValues, [event.target.name]: event.target.value });
     }
   };
+
   const handleUpdate = async () => {
     if (editingPost) {
       setLoading(true);
@@ -145,6 +161,7 @@ function ProfileGallery() {
         <p> {error.response.data.error}</p>
       ) : userPosts && userPosts.length > 0 ? (
         <div className={styles['image-container']}>
+          {imageError && <p className={styles.error}>{imageError}</p>}
           {userPosts.map((post) => (
             <div key={post._id} className={styles.card}>
               {editingPost && editingPost._id === post._id ? (

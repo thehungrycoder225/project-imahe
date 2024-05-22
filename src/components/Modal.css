@@ -197,8 +197,23 @@
 
 .text-description {
   font-size: 16px;
-  color: var(--primary);
-  margin-top: 1rem;
+  color: var(--gray-dark);
+  font-weight: 700;
+}
+
+.text-selected-post-description {
+  font-size: 16px;
+  color: var(--gray-dark);
+  font-weight: 600;
+  margin-bottom: 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .text-selected-post-description {
+    text-align: left;
+  }
 }
 
 .text-title {

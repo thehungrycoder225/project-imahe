@@ -26,10 +26,22 @@ const UploadImage = () => {
   });
 
   const handleImageChange = (event) => {
-    if (event.target.files[0]) {
-      setImage(event.target.files[0]);
-      setImagePreviewUrl(URL.createObjectURL(event.target.files[0]));
+    const file = event.target.files[0];
+    if (!file) {
+      setImageError('Please select a file');
+      return;
     }
+    if (!file.type.startsWith('image/')) {
+      setImageError('Please select an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      // 5
+      setImageError('File size should not exceed 5MB');
+      return;
+    }
+    setImage(file);
+    setImagePreviewUrl(URL.createObjectURL(file));
     setImageError(null);
   };
   const handleTitleChange = (event) => {
