@@ -136,8 +136,13 @@ const UploadImage = () => {
       ) : (
         <>
           {step === 1 && (
-            <div>
-              <h2>Step 1: Add Image</h2>
+            <div className={styles['control-container']}>
+              <h2>
+                Step 1: Add Image{' '}
+                <span className={styles['text-secondary']}>
+                  ( Max Image File Size 5mb )
+                </span>
+              </h2>
               <div className={styles['control-container']}>
                 {imageError && <div className={styles.error}>{imageError}</div>}
                 <FormControl
@@ -167,7 +172,7 @@ const UploadImage = () => {
           )}
 
           {step === 2 && (
-            <div>
+            <div className={styles['control-container']}>
               <h2>Step 2: Add Title</h2>
               {titleError && <div className={styles.error}>{titleError}</div>}
               <FormControl
@@ -191,7 +196,7 @@ const UploadImage = () => {
           )}
 
           {step === 3 && (
-            <div>
+            <div className={styles['control-container']}>
               <h2>Step 3: Add Description</h2>
               {descriptionError && (
                 <div className={styles.error}>{descriptionError}</div>
@@ -201,25 +206,27 @@ const UploadImage = () => {
                 label='Description'
                 change={handleDescriptionChange}
               />
-              <button
-                onClick={handleSave}
-                className={`${styles.btn} ${styles['btn-primary']}`}
-              >
-                Save
-              </button>
-              <button
-                onClick={handlePreviousStep}
-                className={`${styles.btn} ${styles['btn-neutral']}`}
-              >
-                Previous
-              </button>
+              <div className={styles['control-container']}>
+                <button
+                  onClick={handleSave}
+                  className={`${styles.btn} ${styles['btn-primary']}`}
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handlePreviousStep}
+                  className={`${styles.btn} ${styles['btn-neutral']}`}
+                >
+                  Previous
+                </button>
 
-              <button
-                onClick={handleCancel}
-                className={`${styles.btn} ${styles['btn-neutral']}`}
-              >
-                Cancel
-              </button>
+                <button
+                  onClick={handleCancel}
+                  className={`${styles.btn} ${styles['btn-neutral']}`}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
         </>
