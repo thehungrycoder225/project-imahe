@@ -45,9 +45,11 @@ function ProfileGallery() {
   }, [fetchData, user]);
 
   const handleDelete = async (post) => {
+    setLoading(true);
     try {
       await api.delete(`/posts/${post._id}`);
       // Update userPosts state by filtering out the deleted post
+      setLoading(false);
       setUserPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
     } catch (error) {
       setError('Failed to delete post');

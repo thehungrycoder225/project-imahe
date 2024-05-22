@@ -4,6 +4,7 @@ import Spinner from '../components/Spinner';
 import { Helmet } from 'react-helmet';
 import Modal from '../components/Modal';
 import { fetchImages, fetchAuthorPosts } from '../middleware/Api';
+import LazyLoad from 'react-lazy-load';
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -29,6 +30,12 @@ function Gallery() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (authorPosts.length > 0) {
+      setLoading(false);
+    }
+  }, [authorPosts]);
 
   useEffect(() => {
     imgRefs.current = imgRefs.current.slice(0, images.length);
@@ -68,6 +75,7 @@ function Gallery() {
   const handleAuthorClick = useCallback(
     (authorId) => {
       setIsModalVisible(true);
+      // setLoading(true);
       fetchAuthorPostsCallback(authorId);
     },
     [fetchAuthorPostsCallback]
@@ -95,30 +103,33 @@ function Gallery() {
       </h1>
       <div className={styles['card-grid']}>
         {images.map((image, index) => (
-          <div key={image._id} className={styles.card}>
-            <img
-              ref={(el) => (imgRefs.current[index] = el)}
-              data-src={image.url}
-              alt={image.title}
-              className={styles.lazy}
-            />
-            <div className={styles['card-info']}>
-              <h3 className={styles.title}> Title: {image.title}</h3>
-              <p className={styles.description}>
-                {' '}
-                Description: {image.description}
-              </p>
-              <p
-                className={styles.author}
-                onClick={() => handleAuthorClick(image.author._id)}
-              >
-                Captured by:{' '}
-                <span className={styles['author-link']}>
-                  {image.author.name}
-                </span>
-              </p>
+          <LazyLoad key={image._id} offset={100}>
+            <div key={image._id} className={styles.card}>
+              <img
+                ref={(el) => (imgRefs.current[index] = el)}
+                data-src={image.url}
+                alt={image.title}
+                className={styles.lazy}
+              />
+              <div className={styles['card-info']}>
+                <h3 className={styles.title}> Title: {image.title}</h3>
+                <p className={styles.description}>
+                  {' '}
+                  <span className={styles['text-bold']}>Description:</span>{' '}
+                  {image.description}
+                </p>
+                <p
+                  className={styles.author}
+                  onClick={() => handleAuthorClick(image.author._id)}
+                >
+                  Captured by:{' '}
+                  <span className={styles['author-link']}>
+                    {image.author.name}
+                  </span>
+                </p>
+              </div>
             </div>
-          </div>
+          </LazyLoad>
         ))}
         <Modal
           visible={isModalVisible}
@@ -126,59 +137,82 @@ function Gallery() {
             setIsModalVisible(false);
           }}
         >
-          <button
-            className='modal-close-button'
-            onClick={() => setIsModalVisible(false)}
-          >
-            x
-          </button>
-          <div className='modal-container'>
-            <div>
-              <h1 className='text-center'>
-                {selectedPost
-                  ? selectedPost.title
-                  : authorPosts[0]?.author.name + "'s posts"}
-              </h1>
+          {loading ? (
+            <div className='modal-container'>
+              <Spinner />
             </div>
-            {selectedPost ? (
-              <div>
-                <div className='container'>
-                  <div className='card'>
-                    <img
-                      src={selectedPost.url}
-                      alt={selectedPost.title}
-                      className=''
-                    />
-                    <h3 className='card-info'>Description</h3>
-                    <p className='card-info text-center '>
-                      {selectedPost.description}
-                    </p>
-                  </div>
+          ) : (
+            <>
+              <button
+                className='modal-close-button'
+                onClick={() => {
+                  setIsModalVisible(false);
+                  setAuthorPosts([]);
+                  setSelectedPost(null);
+                }}
+              >
+                x
+              </button>
+              <div className='modal-container'>
+                <div>
+                  <h1 className='text-center text-title'>
+                    {!authorPosts.length ? (
+                      <>
+                        <Spinner />
+                        <p>Loading...</p>
+                      </>
+                    ) : selectedPost ? (
+                      selectedPost.title
+                    ) : (
+                      authorPosts[0]?.author.name + "'s Gallery"
+                    )}
+                  </h1>
                 </div>
-                <button
-                  onClick={() => setSelectedPost(null)}
-                  className='modal-return-button '
-                >
-                  Back to posts
-                </button>
-              </div>
-            ) : (
-              <div className='card-container'>
-                {authorPosts.map((post) => (
-                  <div
-                    key={post._id}
-                    onClick={() => handlePostClick(post)}
-                    className='card'
-                  >
-                    <img src={post.url} alt={post.title} />
-                    <h3 className='card-info text-center m-auto'>
-                      {post.title}
-                    </h3>
+                {selectedPost ? (
+                  <div>
+                    <div className='container'>
+                      <div className='card'>
+                        <img
+                          src={selectedPost.url}
+                          alt={selectedPost.title}
+                          className=''
+                        />
+                        <p className='card-info text-description text-center '>
+                          {selectedPost.description}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedPost(null);
+                        setAuthorPosts([]);
+                      }}
+                      className='modal-return-button '
+                    >
+                      Back to posts
+                    </button>
                   </div>
-                ))}
+                ) : (
+                  <div className='card-container'>
+                    {authorPosts.map((post) => (
+                      <LazyLoad key={post._id} offset={100}>
+                        <div
+                          key={post._id}
+                          className='card'
+                          onClick={() => handlePostClick(post)}
+                        >
+                          <img src={post.url} alt={post.title} className='' />
+                          <p className='card-info text-description text-center'>
+                            {post.title}
+                          </p>
+                        </div>
+                      </LazyLoad>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </Modal>
         {images.length === 0 && !loading && !error && <p>No images found</p>}
       </div>

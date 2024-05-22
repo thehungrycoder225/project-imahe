@@ -190,3 +190,24 @@
   background-color: var(--gray-dark);
   color: var(--lighter);
 }
+
+.text-center {
+  text-align: center;
+}
+
+.text-description {
+  font-size: 16px;
+  color: var(--primary);
+  margin-top: 1rem;
+}
+
+.text-title {
+  font-weight: bold;
+  color: (--primary);
+}
+
+@media screen and (max-width: 768px) {
+  p {
+    text-align: left !important;
+  }
+}

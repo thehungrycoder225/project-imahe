@@ -30,9 +30,11 @@
 }
 
 .text-center {
-  text-align: center;
+  text-align: center !important;
 }
-
+.text-bold {
+  font-weight: bold;
+}
 .card-info {
   padding: 8px;
 }
