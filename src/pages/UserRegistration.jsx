@@ -140,6 +140,7 @@ function UserRegistration() {
               name={'email'}
               value={form.email}
               change={handleInputChange}
+              placeholder={'juancho@xmail.com'}
             />
           </div>
           <div>
@@ -150,15 +151,17 @@ function UserRegistration() {
               id={'studentNumber'}
               value={form.studentNumber}
               change={handleInputChange}
+              placeholder={'2021****'}
             />
           </div>
           <FormControl
-            label='Name'
+            label='Full Name'
             id={'name'}
             name={'name'}
             type='text'
             value={form.name}
             change={handleInputChange}
+            placeholder='Juanchita S. Dela Cruz'
           />
           <div>
             <Button

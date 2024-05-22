@@ -8,6 +8,7 @@ function FormControl({
   disabled,
   state,
   name,
+  placeholder,
 }) {
   return (
     <div>
@@ -25,6 +26,7 @@ function FormControl({
         value={value}
         onChange={change}
         disabled={disabled}
+        placeholder={placeholder}
       />
     </div>
   );
