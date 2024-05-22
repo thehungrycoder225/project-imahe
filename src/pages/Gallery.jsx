@@ -198,7 +198,11 @@ function Gallery() {
                           className='card'
                           onClick={() => handlePostClick(post)}
                         >
-                          <img src={post.url} alt={post.title} className='' />
+                          <img
+                            src={post.url}
+                            alt={post.title}
+                            className='modal-image'
+                          />
                           <p className='card-info text-description text-center'>
                             {post.title}
                           </p>

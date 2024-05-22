@@ -187,7 +187,7 @@
 
 .modal-return-button:hover,
 .modal-return-button:focus {
-  background-color: var(--gray-dark);
+  background-color: var(--primary);
   color: var(--lighter);
 }
 
@@ -204,7 +204,7 @@
 .text-selected-post-description {
   font-size: 16px;
   color: var(--gray-dark);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 0;
   padding: 1rem;
   text-align: center;
@@ -213,6 +213,7 @@
 @media screen and (max-width: 768px) {
   .text-selected-post-description {
     text-align: left;
+    font-size: 14px;
   }
 }
 
@@ -221,8 +222,10 @@
   color: (--primary);
 }
 
-@media screen and (max-width: 768px) {
-  p {
-    text-align: left !important;
-  }
+.modal-image {
+  filter: blur(0) saturate(100%) brightness(1);
+}
+
+.modal-image:hover {
+  backdrop-filter: blur(10px);
 }

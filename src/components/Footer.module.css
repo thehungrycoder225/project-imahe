@@ -12,6 +12,7 @@
 
 .footer p {
   font-size: 12px;
+  text-align: center !important;
 }
 
 .footer img {
