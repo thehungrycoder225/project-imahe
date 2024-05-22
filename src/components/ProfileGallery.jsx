@@ -54,7 +54,6 @@ function ProfileGallery() {
       setUserPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
     } catch (error) {
       setError('Failed to delete post');
-      console.error(error);
     }
   };
 
@@ -106,7 +105,6 @@ function ProfileGallery() {
           if (formValues.image instanceof Blob) {
             response.data.url = URL.createObjectURL(formValues.image);
           }
-          console.log(response.data);
 
           // Update the post in the userPosts state
           setUserPosts((prevPosts) =>

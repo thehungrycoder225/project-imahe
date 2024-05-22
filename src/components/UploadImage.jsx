@@ -112,7 +112,6 @@ const UploadImage = () => {
       }
       setUploadSuccess(true);
     } catch (error) {
-      console.error(error);
       setUploadError(true);
     } finally {
       setUploading(false);

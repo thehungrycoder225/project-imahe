@@ -74,7 +74,6 @@ const Login = () => {
         setError('An error occurred while logging in. Please try again.');
       }
     } catch (error) {
-      console.log(error);
       if (error.response) {
         setError(
           error.response?.data?.message || 'An error occurred while logging in.'
