@@ -103,33 +103,31 @@ function Gallery() {
       </h1>
       <div className={styles['card-grid']}>
         {images.map((image, index) => (
-          <LazyLoad key={image._id} offset={100}>
-            <div key={image._id} className={styles.card}>
-              <img
-                ref={(el) => (imgRefs.current[index] = el)}
-                data-src={image.url}
-                alt={image.title}
-                className={styles.lazy}
-              />
-              <div className={styles['card-info']}>
-                <h3 className={styles.title}> Title: {image.title}</h3>
-                <p className={styles.description}>
-                  {' '}
-                  <span className={styles['text-bold']}>Description:</span>{' '}
-                  {image.description}
-                </p>
-                <p
-                  className={styles.author}
-                  onClick={() => handleAuthorClick(image.author._id)}
-                >
-                  Captured by:{' '}
-                  <span className={styles['author-link']}>
-                    {image.author.name}
-                  </span>
-                </p>
-              </div>
+          <div key={image._id} className={styles.card}>
+            <img
+              ref={(el) => (imgRefs.current[index] = el)}
+              data-src={image.url}
+              alt={image.title}
+              className={styles.lazy}
+            />
+            <div className={styles['card-info']}>
+              <h3 className={styles.title}> Title: {image.title}</h3>
+              <p className={styles.description}>
+                {' '}
+                <span className={styles['text-bold']}>Description:</span>{' '}
+                {image.description}
+              </p>
+              <p
+                className={styles.author}
+                onClick={() => handleAuthorClick(image.author._id)}
+              >
+                Captured by:{' '}
+                <span className={styles['author-link']}>
+                  {image.author.name}
+                </span>
+              </p>
             </div>
-          </LazyLoad>
+          </div>
         ))}
         <Modal
           visible={isModalVisible}
