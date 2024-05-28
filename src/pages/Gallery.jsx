@@ -5,6 +5,9 @@ import { Helmet } from 'react-helmet';
 import Modal from '../components/Modal';
 import { fetchImages, fetchAuthorPosts } from '../middleware/Api';
 import LazyLoad from 'react-lazy-load';
+import { debounce } from 'lodash';
+
+import axios from 'axios';
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -16,20 +19,62 @@ function Gallery() {
   const [authorPosts, setAuthorPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const images = await fetchImages();
-        setImages(images);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-    fetchData();
-  }, []);
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+  const api = axios.create({
+    baseURL: API_URL,
+    headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
+  });
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    const response = await api.get(`/posts?page=${page}`);
+    if (Array.isArray(response.data.postsImages)) {
+      setImages((prevImages) => [...prevImages, ...response.data.postsImages]);
+    } else {
+      console.error('postsImages is not an array:', response.data.postsImages);
+    }
+    setTotalPages(response.data.totalPages);
+    setLoading(false);
+  };
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    if (page <= totalPages && !loading) {
+      setPage(page + 1);
+    }
+  }, [page, totalPages, loading]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [page]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const images = await fetchImages();
+  //       setImages(images);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       setError(err.message);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     if (authorPosts.length > 0) {
@@ -103,7 +148,7 @@ function Gallery() {
       </h1>
       <div className={styles['card-grid']}>
         {images.map((image, index) => (
-          <div key={image._id} className={styles.card}>
+          <div key={index} className={styles.card}>
             <img
               ref={(el) => (imgRefs.current[index] = el)}
               data-src={image.url}
@@ -129,6 +174,7 @@ function Gallery() {
             </div>
           </div>
         ))}
+        {loading && <Spinner />}
         <Modal
           visible={isModalVisible}
           onClose={() => {

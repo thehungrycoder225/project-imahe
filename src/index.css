@@ -341,3 +341,8 @@ h6 {
   --primary-gradient: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
   --secondary-gradient: linear-gradient(87deg, #8965e0 0, #825ee4 100%);
 }
+
+body {
+  scroll-behavior: smooth;
+  transition: all 0.25s linear;
+}

@@ -13,6 +13,7 @@
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "masonry-layout": "^4.2.2",
     "match-sorter": "^6.3.4",
     "quokka-treasure-chest": "^1.0.2",
