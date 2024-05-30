@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './Gallery.module.css';
 import Spinner from '../components/Spinner';
 import { Helmet } from 'react-helmet';
 import Modal from '../components/Modal';
-import { fetchImages, fetchAuthorPosts } from '../middleware/Api';
+import { fetchAuthorPosts } from '../middleware/Api';
 import LazyLoad from 'react-lazy-load';
 import { debounce } from 'lodash';
+import FormControl from '../components/FormControl';
 
 import axios from 'axios';
 
@@ -19,29 +20,41 @@ function Gallery() {
   const [authorPosts, setAuthorPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const [posts, setPosts] = useState([]);
+  const [query, setQuery] = useState('');
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
-  const api = axios.create({
-    baseURL: API_URL,
-    headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
-  });
+  const api = useMemo(
+    () =>
+      axios.create({
+        baseURL: API_URL,
+        headers: { 'x-auth-token': localStorage.getItem('x-auth-token') },
+      }),
+    [API_URL]
+  );
 
-  const fetchPosts = async () => {
-    setLoading(true);
-    const response = await api.get(`/posts?page=${page}`);
-    if (Array.isArray(response.data.postsImages)) {
-      setImages((prevImages) => [...prevImages, ...response.data.postsImages]);
-    } else {
-      console.error('postsImages is not an array:', response.data.postsImages);
-    }
-    setTotalPages(response.data.totalPages);
-    setLoading(false);
-  };
+  const fetchPosts = useCallback(
+    debounce(async () => {
+      setLoading(true);
+      const response = await api.get(`/posts?page=${page}&authorName=${query}`);
+      if (Array.isArray(response.data.postsImages)) {
+        setImages(response.data.postsImages);
+      } else {
+        console.error(
+          'postsImages is not an array:',
+          response.data.postsImages
+        );
+      }
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    }, 500),
+    [api, page, query]
+  );
 
   const handleScroll = useCallback(() => {
+    if (query) return; // Add this line
     if (
       window.innerHeight + document.documentElement.scrollTop !==
       document.documentElement.offsetHeight
@@ -50,7 +63,7 @@ function Gallery() {
     if (page <= totalPages && !loading) {
       setPage(page + 1);
     }
-  }, [page, totalPages, loading]);
+  }, [page, totalPages, loading, query]); // Add query to the dependency array
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -59,22 +72,7 @@ function Gallery() {
 
   useEffect(() => {
     fetchPosts();
-  }, [page]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const images = await fetchImages();
-  //       setImages(images);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       setError(err.message);
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  }, [query, fetchPosts]);
 
   useEffect(() => {
     if (authorPosts.length > 0) {
@@ -120,7 +118,6 @@ function Gallery() {
   const handleAuthorClick = useCallback(
     (authorId) => {
       setIsModalVisible(true);
-      // setLoading(true);
       fetchAuthorPostsCallback(authorId);
     },
     [fetchAuthorPostsCallback]
@@ -130,139 +127,152 @@ function Gallery() {
     setSelectedPost(post);
   };
 
-  if (loading)
-    return (
-      <div className={styles['spinner-container']}>
-        <Spinner />
-      </div>
-    );
-  if (error) return <div>Error: {error}</div>;
-
   return (
-    <div>
+    <div className={styles['gallery-container']}>
       <Helmet>
         <title>Imahe | Gallery</title>
       </Helmet>
       <h1 className={`${styles['gallery-title']} ${styles['text-center']}`}>
         Imahe
-      </h1>
-      <div className={styles['card-grid']}>
-        {images.map((image, index) => (
-          <div key={index} className={styles.card}>
-            <img
-              ref={(el) => (imgRefs.current[index] = el)}
-              data-src={image.url}
-              alt={image.title}
-              className={styles.lazy}
-            />
-            <div className={styles['card-info']}>
-              <h3 className={styles.title}> Title: {image.title}</h3>
-              <p className={styles.description}>
-                {' '}
-                <span className={styles['text-bold']}>Description:</span>{' '}
-                {image.description}
-              </p>
-              <p
-                className={styles.author}
-                onClick={() => handleAuthorClick(image.author._id)}
-              >
-                Captured by:{' '}
-                <span className={styles['author-link']}>
-                  {image.author.name}
-                </span>
-              </p>
-            </div>
+      </h1>{' '}
+      <div className={styles['search-container']}>
+        <FormControl
+          type={'text'}
+          placeholder={'Search...'}
+          name={'authorName'}
+          id={'authorName'}
+          value={query}
+          change={(e) => setQuery(e.target.value.trim().toLowerCase())}
+          label={'Search'}
+        />
+      </div>
+      {loading ? (
+        <>
+          <div className={styles['spinner-container']}>
+            <Spinner />
           </div>
-        ))}
-        {loading && <Spinner />}
-        <Modal
-          visible={isModalVisible}
-          onClose={() => {
-            setIsModalVisible(false);
-          }}
-        >
-          {loading ? (
-            <div className='modal-container'>
-              <Spinner />
+        </>
+      ) : error ? (
+        <p className={styles.error}>{error}</p>
+      ) : (
+        <div className={styles['card-grid']}>
+          {images.map((image, index) => (
+            <div key={index} className={styles.card}>
+              <img
+                ref={(el) => (imgRefs.current[index] = el)}
+                data-src={image.url}
+                alt={image.title}
+                className={styles.lazy}
+              />
+              <div className={styles['card-info']}>
+                <h3 className={styles.title}> Title: {image.title}</h3>
+                <p className={styles.description}>
+                  {' '}
+                  <span className={styles['text-bold']}>Description:</span>{' '}
+                  {image.description}
+                </p>
+                <p
+                  className={styles.author}
+                  onClick={() => handleAuthorClick(image.author._id)}
+                >
+                  Captured by:{' '}
+                  <span className={styles['author-link']}>
+                    {image.author.name}
+                  </span>
+                </p>
+              </div>
             </div>
-          ) : (
-            <>
-              <button
-                className='modal-close-button'
-                onClick={() => {
-                  setIsModalVisible(false);
-                  setAuthorPosts([]);
-                  setSelectedPost(null);
-                }}
-              >
-                x
-              </button>
+          ))}
+          {loading && <Spinner />}
+          <Modal
+            visible={isModalVisible}
+            onClose={() => {
+              setIsModalVisible(false);
+            }}
+          >
+            {loading ? (
               <div className='modal-container'>
-                <div>
-                  <h1 className='text-center text-title'>
-                    {!authorPosts.length ? (
-                      <>
-                        <Spinner />
-                        <p>Loading...</p>
-                      </>
-                    ) : selectedPost ? (
-                      selectedPost.title
-                    ) : (
-                      authorPosts[0]?.author.name + "'s Gallery"
-                    )}
-                  </h1>
-                </div>
-                {selectedPost ? (
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <button
+                  className='modal-close-button'
+                  onClick={() => {
+                    setIsModalVisible(false);
+                    setAuthorPosts([]);
+                    setSelectedPost(null);
+                  }}
+                >
+                  x
+                </button>
+                <div className='modal-container'>
                   <div>
-                    <div className='container'>
-                      <div className='card'>
-                        <img
-                          src={selectedPost.url}
-                          alt={selectedPost.title}
-                          className=''
-                        />
-                        <p className='text-selected-post-description  '>
-                          {selectedPost.description}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setSelectedPost(null);
-                      }}
-                      className='modal-return-button '
-                    >
-                      Back to posts
-                    </button>
+                    <h1 className='text-center text-title'>
+                      {!authorPosts.length ? (
+                        <>
+                          <Spinner />
+                          <p>Loading...</p>
+                        </>
+                      ) : selectedPost ? (
+                        selectedPost.title
+                      ) : (
+                        authorPosts[0]?.author.name + "'s Gallery"
+                      )}
+                    </h1>
                   </div>
-                ) : (
-                  <div className='card-container'>
-                    {authorPosts.map((post) => (
-                      <LazyLoad key={post._id} offset={100}>
-                        <div
-                          key={post._id}
-                          className='card'
-                          onClick={() => handlePostClick(post)}
-                        >
+                  {selectedPost ? (
+                    <div>
+                      <div className='container'>
+                        <div className='card'>
                           <img
-                            src={post.url}
-                            alt={post.title}
-                            className='modal-image'
+                            src={selectedPost.url}
+                            alt={selectedPost.title}
+                            className=''
                           />
-                          <p className='card-info text-description text-center'>
-                            {post.title}
+                          <p className='text-selected-post-description  '>
+                            {selectedPost.description}
                           </p>
                         </div>
-                      </LazyLoad>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </Modal>
-        {images.length === 0 && !loading && !error && <p>No images found</p>}
-      </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedPost(null);
+                        }}
+                        className='modal-return-button '
+                      >
+                        Back to posts
+                      </button>
+                    </div>
+                  ) : (
+                    <div className='card-container'>
+                      {authorPosts.map((post) => (
+                        <LazyLoad key={post._id} offset={100}>
+                          <div
+                            key={post._id}
+                            className='card'
+                            onClick={() => handlePostClick(post)}
+                          >
+                            <img
+                              src={post.url}
+                              alt={post.title}
+                              className='modal-image'
+                            />
+                            <p className='card-info text-description text-center'>
+                              {post.title}
+                            </p>
+                          </div>
+                        </LazyLoad>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </Modal>
+          {images.length === 0 && !loading && !error && <p>No images found</p>}
+        </div>
+      )}
     </div>
   );
 }
