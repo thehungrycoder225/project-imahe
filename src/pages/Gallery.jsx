@@ -7,6 +7,7 @@ import { fetchAuthorPosts } from '../middleware/Api';
 import LazyLoad from 'react-lazy-load';
 import { debounce } from 'lodash';
 import FormControl from '../components/FormControl';
+import Button from '../components/Button';
 
 import axios from 'axios';
 
@@ -20,7 +21,9 @@ function Gallery() {
   const [authorPosts, setAuthorPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState();
+
+  const [formValue, setFormValue] = useState(null);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -138,12 +141,37 @@ function Gallery() {
       <div className={styles['search-container']}>
         <FormControl
           type={'text'}
-          placeholder={'Search...'}
+          placeholder={'...'}
           name={'authorName'}
           id={'authorName'}
-          value={query}
-          change={(e) => setQuery(e.target.value.trim().toLowerCase())}
-          label={'Search'}
+          value={formValue}
+          label={`Search by author's name:`}
+          change={(e) => {
+            setFormValue(e.target.value);
+          }}
+          styles={'form-inline'}
+        />
+        <Button
+          color={'btn-primary'}
+          click={() => {
+            setQuery(formValue);
+            setPage(1);
+            fetchPosts();
+          }}
+          text={'Search'}
+          size={'btn-inline'}
+        />
+        <Button
+          color={'btn-danger'}
+          click={() => {
+            setQuery(null);
+            setPage(1);
+            fetchPosts();
+            setFormValue('');
+          }}
+          text={'Clear'}
+          s
+          size={'btn-inline'}
         />
       </div>
       {loading ? (

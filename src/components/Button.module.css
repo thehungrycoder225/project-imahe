@@ -20,6 +20,12 @@
   width: 100%;
 }
 
+.btn-inline {
+  display: inline-block;
+  width: max-content;
+  margin: 0;
+}
+
 .btn {
   background-color: var(--gray-dark);
   color: var(--lighter);
@@ -47,9 +53,7 @@
 }
 
 .btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-  outline: 1px solid var(--primary-dark);
+.btn-primary:focus {
   background-color: var(--primary-dark);
   color: var(--lighter);
 }
@@ -68,7 +72,7 @@
   color: var(--gray);
 }
 
-.btn-danger {
+.btn-primary .btn-danger {
   background-color: var(--danger);
   color: var(--lighter);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

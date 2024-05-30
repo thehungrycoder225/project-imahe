@@ -9,6 +9,7 @@ function FormControl({
   state,
   name,
   placeholder,
+  styles,
 }) {
   return (
     <div>
@@ -22,7 +23,9 @@ function FormControl({
         type={type}
         name={name}
         id={id}
-        className={`${style['form-control']} ${style[`${state}`]}`}
+        className={`${style['form-control']} ${style[`${state}`]} ${
+          style[`${styles}`]
+        }`}
         value={value}
         onChange={change}
         disabled={disabled}
