@@ -148,6 +148,11 @@ function Gallery() {
           label={`Search by author's name:`}
           change={(e) => {
             setFormValue(e.target.value);
+            if (e.target.value === '') {
+              setQuery(null);
+              setPage(1);
+              fetchPosts();
+            }
           }}
           styles={'form-inline'}
         />
