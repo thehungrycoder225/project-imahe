@@ -145,7 +145,7 @@ function Gallery() {
           name={'authorName'}
           id={'authorName'}
           value={formValue}
-          label={`Search by author's name:`}
+          label={`Enter the Storyteller's Name`}
           change={(e) => {
             setFormValue(e.target.value);
             if (e.target.value === '') {
@@ -181,7 +181,7 @@ function Gallery() {
       </div>
       {loading ? (
         <>
-          <div className={styles['spinner-container']}>
+          <div className={styles['text-center']}>
             <Spinner />
           </div>
         </>
