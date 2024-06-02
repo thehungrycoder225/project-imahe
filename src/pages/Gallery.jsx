@@ -23,7 +23,7 @@ function Gallery() {
 
   const [query, setQuery] = useState();
 
-  const [formValue, setFormValue] = useState(null);
+  const [formValue, setFormValue] = useState('');
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
